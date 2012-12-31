@@ -1,0 +1,882 @@
+<?php
+/**
+ * CONV(置換)クラス
+ *
+ * いわゆる「テンプレートエンジン」。
+ *
+ * @package magicweapon
+ * @link http://www.grid-works-guild.net/MagicWeapon/ MagicWeapon
+ * @access  public
+ * @author  Michiaki Wuzawa <wuzawa@m-fr.net>
+ * @create  $LastChangedDate$
+ * @version $Revision$
+ **/
+
+// 全体管理用
+class f_conv_param
+{
+//public:
+public function __construct()
+{
+  $this->init();
+}
+
+//
+public function init()
+{
+}
+
+//
+public function get_fnc() { return $this->fnc_; }
+public function set_fnc($s) { $this->fnc_ = $s; }
+
+public function get_key() { return $this->key_; }
+public function set_key($s) { $this->key_ = $s; }
+
+public function get_data() { return $this->data_; }
+public function set_data($s) { $this->data_ = $s; }
+
+public function get_param() { return $this->param_; }
+public function set_param($s) { $this->param_ = $s; }
+
+public function get_pcwk() { return $this->pcwk_; }
+public function set_pcwk($s) { $this->pcwk_ = $s; }
+
+//
+public function get_n_nomal_obj() { return $this->n_nomal_obj_; }
+public function get_n_key_obj() { return $this->n_key_obj_; }
+public function get_m_nomal_obj() { return $this->m_nomal_obj_; }
+public function get_m_b_key_obj() { return $this->m_b_key_obj_; }
+public function get_m_param_obj() { return $this->m_param_obj_; }
+public function get_m_data_obj() { return $this->m_data_obj_; }
+public function get_t_nomal_obj() { return $this->t_nomal_obj_; }
+public function get_t_key_obj() { return $this->t_key_obj_; }
+public function get_t_param_obj() { return $this->t_param_obj_; }
+
+public function set_n_nomal_obj($o) { $this->n_nomal_obj_ = $o; }
+public function set_n_key_obj($o) { $this->n_key_obj_ = $o; }
+public function set_m_nomal_obj($o) { $this->m_nomal_obj_ = $o; }
+public function set_m_b_key_obj($o) { $this->m_b_key_obj_ = $o; }
+public function set_m_param_obj($o) { $this->m_param_obj_ = $o; }
+public function set_m_data_obj($o) { $this->m_data_obj_ = $o; }
+public function set_t_nomal_obj($o) { $this->t_nomal_obj_ = $o; }
+public function set_t_key_obj($o) { $this->t_key_obj_ = $o; }
+public function set_t_param_obj($o) { $this->t_param_obj_ = $o; }
+
+//private:
+//
+private $fnc_;
+private $key_;
+private $data_;
+private $param_;
+private $pcwk_;
+//
+private $n_nomal_obj_;
+private $n_key_obj_;
+private $m_nomal_obj_;
+private $m_b_key_obj_;
+private $m_param_obj_;
+private $m_data_obj_;
+private $t_nomal_obj_;
+private $t_key_obj_;
+private $t_param_obj_;
+} // end of class
+
+// 通常解析
+class conv_n_nomal
+{
+//public:
+public function __construct()
+{
+  $this->init();
+}
+
+//
+public function init()
+{
+}
+
+// 実処理
+public function run($pp)
+{
+  // %%% を検索
+  $ind = strpos($pp->get_pcwk(), '%%%');
+//var_dump($ind);
+
+  // 根本的になければ
+  if (false === $ind) {
+    $ret = $pp->get_pcwk();
+    $pp->set_pcwk("");
+    return $ret;
+  }
+
+  // 先頭が%%%以外なら、まずポインタを進める
+  if (0 !== $ind) {
+    $ret = substr($pp->get_pcwk(), 0, $ind);
+    $pp->set_pcwk(substr($pp->get_pcwk(), $ind));
+    return $ret;
+  }
+
+  // 解析モードスタートにする
+  // if (0 === $ind)
+  $pp->set_fnc( $pp->get_n_key_obj() );
+  $pp->set_pcwk(substr($pp->get_pcwk(), 3));
+  return "";
+}
+
+} // end of class
+
+// 単置換解析モード
+class conv_n_key
+{
+//public:
+public function __construct()
+{
+  $this->init();
+}
+
+//
+public function init()
+{
+}
+
+//
+public function run($pp)
+{
+  // 一気にKeyの解析を行う
+  while("" !== $pp->get_pcwk()) {
+//print "key is " . $pp->get_key() . "\n";
+    // %%% がみつかったら解析終了
+    if ( 0 === strncmp($pp->get_pcwk(), '%%%', 3)) {
+      $pp->set_pcwk(substr($pp->get_pcwk(), 3)); // "%%%"をとばす
+      $pp->set_fnc( $pp->get_n_nomal_obj() );
+      return "";
+    }
+
+    // それ以外なら
+    // キーの文字を足しこむ
+    $wk = $pp->get_pcwk();
+    $pp->set_key($pp->get_key() . $wk[0]);
+    $pp->set_pcwk(substr($pp->get_pcwk(), 1)); // 次の文字へ
+  }
+
+  // XXX ここにはこないはずだが、一応
+  return "";
+}
+
+} // end of class
+
+
+// 複置換スタート因子発見
+class conv_m_nomal
+{
+//public:
+public function __construct()
+{
+  $this->init();
+}
+
+//
+public function init()
+{
+}
+
+//
+public function run($pp)
+{
+  // $$$ を検索
+  $ind = strpos($pp->get_pcwk(), '$$$');
+//print "ind is \n";
+//var_dump($pp->get_pcwk());
+//var_dump($ind);
+
+  // 根本的になければ
+  if (false === $ind) {
+//print "false Trap 1\n";
+    $ret = $pp->get_pcwk();
+    $pp->set_pcwk("");
+//var_dump($pp->get_pcwk());
+//print "false Trap 2\n";
+    return $ret;
+  }
+
+  // 先頭が$$$以外なら、まずポインタを進める
+  if (0 !== $ind) {
+//print "true Trap 1\n";
+//var_dump($ind);
+    $ret = substr($pp->get_pcwk(), 0, $ind);
+    $pp->set_pcwk(substr($pp->get_pcwk(), $ind));
+    return $ret;
+  }
+
+  // 解析モードスタートにする
+  // if (0 === $ind)
+//print "Trap 1\n";
+//var_dump($pp->get_pcwk());
+  $pp->set_fnc( $pp->get_m_b_key_obj() );
+  $pp->set_pcwk(substr($pp->get_pcwk(), 3));
+//var_dump($pp->get_pcwk());
+//print "Trap 2\n";
+  return "";
+}
+
+} // end of class
+
+
+// 複置換解析モード
+class conv_m_b_key
+{
+//public:
+public function __construct()
+{
+  $this->init();
+}
+
+//
+public function init()
+{
+}
+
+//
+public function run($pp)
+{
+  // 一気にKeyの解析を行う
+  while("" != $pp->get_pcwk()) {
+//print "key is \n";
+//var_dump($pp->get_key());
+    // $$$ならdataモードに移行
+    if ( 0 === strncmp($pp->get_pcwk(), '$$$', 3)) {
+      $pp->set_pcwk(substr($pp->get_pcwk(), 3)); // "$$$"をとばす
+      $pp->set_fnc( $pp->get_m_data_obj() );
+      return "";
+    }
+
+    // ':'が出てきたらparam解析モードに
+    if ( 0 === strncmp($pp->get_pcwk(), ':', 1)) {
+      $pp->set_pcwk(substr($pp->get_pcwk(), 1)); // 次の文字へ
+      $pp->set_fnc( $pp->get_m_param_obj() );
+      return "";
+    }
+
+    // それ以外なら
+    // キーの文字を足しこむ
+    $wk = $pp->get_pcwk();
+    $pp->set_key($pp->get_key() . $wk[0]);
+    $pp->set_pcwk(substr($pp->get_pcwk(), 1)); // 次の文字へ
+  }
+
+  // XXX ここにはこないはずだが、一応
+  return "";
+}
+
+} // end of class
+
+
+// 複置換用パラメタ解析モード
+class conv_m_param
+{
+//public:
+public function __construct()
+{
+  $this->init();
+}
+
+//
+public function init()
+{
+}
+
+//
+public function run($pp)
+{
+  // 一気にKeyの解析を行う
+  while("" !== $pp->get_pcwk()) {
+//print "key is " . $pp->get_key() . "\n";
+    // $$$ならdataモードに移行
+    if ( 0 === strncmp($pp->get_pcwk(), '$$$', 3)) {
+      $pp->set_pcwk(substr($pp->get_pcwk(), 3)); // "$$$"をとばす
+      $pp->set_fnc( $pp->get_m_data_obj() );
+      return "";
+    }
+
+    // それ以外なら
+    // パラメタの文字を足しこむ
+    $wk = $pp->get_pcwk();
+    $pp->set_param($wk[0]);
+    $pp->set_pcwk(substr($pp->get_pcwk(), 1)); // 次の文字へ
+  }
+
+  // XXX ここにはこないはずだが、一応
+  return "";
+}
+
+} // end of class
+
+
+// 複置換要素解析
+class conv_m_data
+{
+//public:
+public function __construct()
+{
+  $this->init();
+}
+
+//
+public function init()
+{
+}
+
+//
+public function run($pp)
+{
+  // 終了キーの作成
+  $fk = '$$$/' . $pp->get_key() . '$$$';
+//print "fk is $fk \n";
+  $fk_len = strlen($fk);
+
+  // 終了キーが見つかるまで
+  $pp->set_data("");
+  while("" !== $pp->get_pcwk()) {
+//print "\n\n--------\ndata is \n" . $pp->get_data() . "\n-----------\n";
+
+    // キーがみつからなければdataに文字列を加えてループ
+    // XXX ちと冗長じゃない？
+    if ( 0 !== strncmp($pp->get_pcwk() , $fk, $fk_len) ) {
+      $pp->set_data($pp->get_data() . substr($pp->get_pcwk(), 0, 1));
+      $pp->set_pcwk(substr($pp->get_pcwk(), 1)); // 次の文字へ
+      continue;
+    }
+
+    // キーが見つかった場合の処理
+    $pp->set_pcwk(substr($pp->get_pcwk(), $fk_len)); // pcwkを先に進める
+    $pp->set_fnc( $pp->get_m_nomal_obj() ); // 関数ポインタを元に戻す
+    return "";
+  }
+
+  // XXX ここにはこないはずだが、一応
+  $pp->set_fnc( $pp->get_m_nomal_obj() ); // 関数ポインタを元に戻す
+  return "";
+}
+
+} // end of class
+
+
+// 特殊置換解析
+class conv_t_nomal
+{
+//public:
+public function __construct()
+{
+  $this->init();
+}
+
+//
+public function init()
+{
+}
+
+//
+public function run($pp)
+{
+  // *** を検索
+  $ind = strpos($pp->get_pcwk(), '***');
+//var_dump($ind);
+
+  // 根本的になければ
+  if (false === $ind) {
+    $ret = $pp->get_pcwk();
+    $pp->set_pcwk("");
+    return $ret;
+  }
+
+  // 先頭が***以外なら、まずポインタを進める
+  if (0 !== $ind) {
+    $ret = substr($pp->get_pcwk(), 0, $ind);
+    $pp->set_pcwk(substr($pp->get_pcwk(), $ind));
+    return $ret;
+  }
+
+  // 解析モードスタートにする
+  // if (0 === $ind)
+  $pp->set_fnc( $pp->get_t_key_obj() );
+  $pp->set_pcwk(substr($pp->get_pcwk(), 3));
+  return "";
+}
+
+} // end of class
+
+
+// 特殊置換 解析モード
+class conv_t_key
+{
+//public:
+public function __construct()
+{
+  $this->init();
+}
+
+//
+public function init()
+{
+}
+
+//
+public function run($pp)
+{
+  // 一気にKeyの解析を行う
+  while("" !== $pp->get_pcwk()) {
+//cout << "key is " << pp->key << endl;
+    // ***がみつかったら解析終了
+    if ( 0 === strncmp($pp->get_pcwk(), '***', 3)) {
+      $pp->set_pcwk(substr($pp->get_pcwk(), 3)); // "***"をとばす
+      $pp->set_fnc( $pp->get_t_nomal_obj() );
+      return "";
+    }
+
+    // ':'が出てきたらparam解析モードに
+    if ( 0 === strncmp($pp->get_pcwk(), ':', 1)) {
+      $pp->set_pcwk(substr($pp->get_pcwk(), 1)); // 次の文字へ
+      $pp->set_fnc( $pp->get_t_param_obj() );
+      return "";
+    }
+
+    // それ以外なら
+    // キーの文字を足しこむ
+    $pp->set_key( $pp->get_key() . substr($pp->get_pcwk(), 0, 1) );
+    $pp->set_pcwk(substr($pp->get_pcwk(), 1)); // 次の文字へ
+  }
+
+  // XXX ここにはこないはずだが、一応
+  return "";
+}
+
+} // end of class
+
+
+// 特殊置換 パラメタ解析
+class conv_t_param
+{
+//public:
+public function __construct()
+{
+  $this->init();
+}
+
+//
+public function init()
+{
+}
+
+//
+public function run($pp)
+{
+  // 一気にKeyの解析を行う
+  while("" !== $pp->get_pcwk()) {
+//cout << "key is " << pp->key << endl;
+    // ***がみつかったら解析終了
+    if ( 0 === strncmp($pp->get_pcwk(), '***', 3)) {
+      $pp->set_pcwk(substr($pp->get_pcwk(), 3)); // "***をとばす
+      $pp->set_fnc( $pp->get_t_nomal_obj() );
+      return "";
+    }
+
+    // それ以外なら
+    // パラメタの文字を足しこむ
+    $pp->set_param( $pp->get_param() . substr($pp->get_pcwk(), 0, 1) );
+    $pp->set_pcwk(substr($pp->get_pcwk(), 1)); // 次の文字へ
+  }
+
+  // XXX ここにはこないはずだが、一応
+  return "";
+}
+
+} // end of class
+
+
+//////////////////////////////////////
+//
+// 置換クラス メイン
+//
+//////////////////////////////////////
+class f_conv {
+// public:
+
+public function __construct()
+{
+  $this->init();
+}
+
+//
+public function init()
+{
+  $this->toku_ = array();
+  $this->toku_yes_ = array();
+  $this->toku_no_ = array();
+  $this->mono_ = array();
+  $this->fuku_ = array();
+}
+
+/**
+ * テスト用内部データ取得
+ *
+ * 文字列で内部データを取得する。
+ * stdoutに出すならT_putのほうが楽
+ *
+ * @access public
+ * @return string 内部データ
+ */
+public function T_string() {
+$ret = "";
+
+  $ret .= "mono dictionary\n";
+  foreach($this->mono_ as $name => $value) {
+    $ret .= "  " . $name . ": " . $value . "\n";
+  }
+  $ret .= "\n";
+
+  $ret .= "multi dictionary\n";
+  foreach($this->fuku_ as $name => $value) {
+    $ret .= "  " . $name . ": " . get_class($value) . "\n";
+  }
+  $ret .= "\n";
+
+  $ret .= "tokusyu dictionary\n";
+  foreach($this->toku_ as $name => $value) {
+    $ret .= "  " . $name . "\n";
+    $ret .= "	yes : " . $this->toku_yes_[$name] . "\n";
+    $ret .= "	 no : " . $this->toku_no_[$name] . "\n";
+    $ret .= "	data: ";
+
+    foreach($this->toku_[$name] as $n => $v) {
+      $ret .= $v . " , ";
+    }
+    $ret .= "\n";
+  }
+  //
+  $ret .= "T_put Fin\n";
+
+  //
+  return $ret;
+}
+
+/**
+ * テスト用内部データ出力
+ *
+ *
+ * @access public
+ */
+public function T_put() {
+  echo $this->T_string();
+}
+
+/**
+ * 特殊置換系登録
+ *
+ * 主にchekbox、select、radioなど用の設定
+ *
+ * @access public
+ * @param string $name 指示子名
+ * @param string $y データ配列内に値が有るときの設定内容
+ * @param string $n データ配列内に値が無いときの設定内容
+ * @param array $d データ配列
+ * @return boolean 何か問題があればfalse
+ */
+public function monoDicToku($name, $y, $n, $d) {
+  if ("" === $name) {
+    return false;
+  }
+
+  // データが配列ではないときに無理やり配列にしてみる
+  if (is_array($d)) {
+    $da = $d;
+  } else {
+  // XXX データが空なら配列にしない
+      if ("" !== $d) {
+      $da = array($d);
+    } else {
+      $da = $d;
+    }
+  }
+
+  // セット
+  $this->toku_[$name] = $da;
+  $this->toku_yes_[$name] = $y;
+  $this->toku_no_[$name] = $n;
+
+  //
+  return true;
+}
+
+/**
+ * 単置換登録
+ *
+ * @access public
+ * @param string $name 指示子名
+ * @param string $value 設定する値
+ * @return boolean 何か問題があればfalse
+ */
+public function monoDic($name, $value) {
+  if ("" === $name) {
+    return false;
+  }
+  //
+  $this->mono_[$name] = $value;
+
+  //
+  return true;
+}
+
+/**
+ * 複置換登録
+ *
+ * @access public
+ * @param string $name 指示子名
+ * @param クラスインスタンス $obj 実行されるべきクラス
+ * @return boolean 何か問題があればfalse
+ */
+// 複置換系
+public function multiDic($name, $obj) {
+  if ("" === $name) {
+    return false;
+  }
+  //
+  $this->fuku_[$name] = $obj;
+
+  //
+  return true;
+}
+
+/**
+ * 置換実施
+ *
+ * @access public
+ * @param string $ret 置換もとの文字列
+ * @return string 置換後の文字列。エラーの場合空文字列
+ */
+function conv($basedata) {
+  //
+  if ("" === $basedata) {
+    return "";
+  }
+
+$m_ret = "";
+$t_ret = "";
+$ret = "";
+$buf = "";
+$pp = new f_conv_param;
+
+  // 置換用パラメタ編集
+  $pp->set_n_nomal_obj( new conv_n_nomal);
+  $pp->set_n_key_obj  ( new conv_n_key);
+  $pp->set_m_nomal_obj( new conv_m_nomal);
+  $pp->set_m_b_key_obj( new conv_m_b_key);
+  $pp->set_m_param_obj( new conv_m_param);
+  $pp->set_m_data_obj ( new conv_m_data);
+  $pp->set_t_nomal_obj( new conv_t_nomal);
+  $pp->set_t_key_obj  ( new conv_t_key);
+  $pp->set_t_param_obj( new conv_t_param);
+
+  // 初期処理
+  $pp->set_pcwk($basedata);
+  $pp->set_key("");
+  $pp->set_param("");
+  $pp->set_data("");
+
+  // 複置換処理
+  //////////////////////////////////////////////
+//print "start multiDic\n";
+  $pp->set_fnc($pp->get_m_nomal_obj());
+  while( "" !== $pp->get_pcwk()) {
+//print "loop_start\n";
+//var_dump($pp->get_pcwk());
+//var_dump($pp->get_fnc());
+    $buf = $pp->get_fnc()->run($pp);
+//cout << "1:" << buf << endl;
+//print "1:\n$buf\n---------------\n";
+//print " :\n" . $pp->get_pcwk() . "\n---------------\n";
+
+    if ("" !== $pp->get_data()) {
+      $key = $pp->get_key();
+//print "key is \n";
+//var_dump($key);
+//var_dump($this->fuku_);
+      if (true === isset($this->fuku_[$key])) {
+        // keyが存在する場合
+        $f = $this->fuku_[$key];
+        // パラメタ値取得
+        // XXX undefined処理省いてるけど平気かなぁ？
+        $param = $pp->get_param();
+//print "---------------------\n";
+//var_dump($f);
+//var_dump($param);
+//print "---------------------\n";
+
+        // オブジェクトのメソッドをcall
+        $buf = $f->m_conv($pp->get_data(), $param);
+//print "---------------------\n";
+//print "data is \n";
+//var_dump($pp->get_data());
+//print "function buf is \n";
+//var_dump($buf);
+//print "---------------------\n";
+//Console.WriteLine( buf );
+      }
+      else {
+        $buf = "";
+//print "not find key ... \n";
+//cout << "not find key..." << pp.key << endl;
+      }
+
+      // 初期化
+      $pp->set_data("");
+      $pp->set_param("");
+      $pp->set_key("");
+    }
+//print "multi buf is $buf";
+
+    // 合算
+    if ("" !== $buf) {
+      $m_ret .= $buf;
+      $buf = "";
+    }
+//var_dump($buf);
+  }
+//print "multi fin \n---------------\n $m_ret \n-------------------\n";
+
+  // 特殊置換処理
+  //////////////////////////////////////////////
+
+  // 初期処理
+  $pp->set_pcwk($m_ret);
+//Console.WriteLine("-----------------"); 
+//Console.WriteLine(m_ret); 
+//Console.WriteLine("-----------------"); 
+
+  $pp->set_key("");
+  $t_flg = "false";
+
+  //
+//print "start monoDicToku\n";
+  $pp->set_fnc($pp->get_t_nomal_obj());
+  while( "" !== $pp->get_pcwk()) {
+    $buf = $pp->get_fnc()->run($pp);
+    //
+    $param = $pp->get_param();
+    $key = $pp->get_key();
+    if ("" !== $param) {
+//Console.WriteLine("main:: param is " + pp.param); 
+      // 特殊置換処理
+      if(false === isset($this->toku_[$key])) {
+        // keyが存在しない場合
+        // 空の文字列を代入
+//cout << "main:: not find key" << endl;
+        $toku_data = array();
+      } else {
+//cout << "main:: find key" << endl;
+        $toku_data = $this->toku_[$key];
+      }
+
+      // パラメタとデータの突合せ
+      $t_flg = false;
+      foreach ($toku_data as $wk) {
+//cout << "main:: values " << s << endl;
+        if ($param === $wk) {
+//cout << "main:: param == values" << endl;
+          $t_flg = true;
+          break;
+        }
+      }
+//cout << "main:: Trap1" << endl;
+
+      // データの設定
+      if (true === $t_flg) {
+//cout << "main:: yes" << endl;
+        // Yesのパターン
+        if (true === isset($this->toku_yes_[$key])) {
+          $buf = $this->toku_yes_[$key];
+        } else {
+          $buf = '';
+        }
+      } else {
+//cout << "main:: no" << endl;
+        // Noのパターン
+        if (true === isset($this->toku_no_[$key])) {
+          $buf = $this->toku_no_[$key];
+        } else {
+          $buf = '';
+        }
+
+      }
+
+      $pp->set_key("");
+      $pp->set_param("");
+    }
+
+    // 合算
+    if ("" !== $buf) {
+      $t_ret .= $buf;
+      $buf = "";
+    }
+  }
+//print "\n\n toku fin $t_ret \n\n";
+
+  // 単置換処理
+  ////////////////////////////////////////////////////
+  // 初期処理
+  $pp->set_pcwk($t_ret);
+  $pp->set_fnc($pp->get_n_nomal_obj());
+  $pp->set_key("");
+
+//Console.WriteLine("%%"); 
+//print "start monoDic\n";
+  while( "" !== $pp->get_pcwk()) {
+    $buf = $pp->get_fnc()->run($pp);
+//cout << "::" << buf << endl;
+
+    //
+    $key = $pp->get_key();
+    if ("" !== $key) {
+      // 単置換処理
+      if (true === isset($this->mono_[$key])) {
+        $buf = $this->mono_[$key];
+      } else {
+        $buf = '';
+      }
+//var_dump($key);
+//var_dump($this->mono_);
+
+      //
+      $pp->set_key("");
+    }
+    // 合算
+    if ("" !== $buf) {
+      $ret .= $buf;
+      $buf = "";
+    }
+  }
+
+  // XXX 単置換の追加
+  $ret = preg_replace("/###/", "%%%", $ret);
+  // XXX 特殊置換用の追加
+  $ret = preg_replace("/@@@/", "***", $ret);
+
+  //
+  return $ret;
+}
+
+
+// private:
+//
+private $toku_;	// 特殊置換用データ
+private $toku_yes_;	// 特殊置換用データ:値が一致したときの設定データ
+private $toku_no_;	// 特殊置換用データ:値が一致しないときの設定データ
+
+//
+private $mono_;	// 単置換用データ
+
+//
+private $fuku_;	// 複置換用データ
+
+} // end of class
+

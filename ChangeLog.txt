@@ -1,0 +1,1122 @@
+2012-10-04 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:base_model@base_model.inc
+	forwardメソッドを追加。やってることは「recursive_on＋set_recursive_command」。
+
+	*add:base_model@base_model.inc
+	redirectメソッドを追加。
+
+	*add:base_model@base_model.inc
+	finalizeメソッドを追加。テンプレートに、configから取得した「uri、ssl_uri、mx_domain」を設定。
+
+	*modify:cgi_response@cgi_response.inc
+	set_locationにhttp_status引数を追加。実装はざっくりなので、もしかしたら後でもう一度修正。
+
+2012-02-05 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify:authentication_password_stretching@authentication_password_stretching.inc
+	ストレッチ回数の振れ幅がちょっと大きすぎたので、小さめに改修
+
+2012-01-15 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:authentication_id_pass@authentication_id_pass.inc
+	「IDとパスワードによる認証」を追加：ロック系まだ入れてない orz
+
+	*add:authentication_password_stretching@authentication_password_stretching.inc
+	パスワードストレッチ。とりあえずざっくり実装
+
+	*add:authentication_password_stretching_make.php
+	パスワードストレッチによるパスワード文字列を作るためのユーティリティ
+
+	*add:authorization_cookie@authorization_cookie.inc
+	Cookieによる認可
+
+	*modify:base_model_skeleton@base_model_skeleton.inc
+	direct_output_on()及びdirect_output_off()のメソッドを、protectedからpublicに変更
+
+2010-05-28 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify:controller@controller.inc
+	diを考慮した作りに修正
+
+	*modify:view@view.inc
+	テンプレートファイルの文字コードをconfigで設定可能にした
+
+	*add:internet_message_format@internet_message_format.inc
+	set_mail_stringメソッドを追加
+
+	*modify:internet_message_format@internet_message_format.inc
+	内部文字コードを、EUC固定からmw_areasetting考慮に修正
+
+	*modify:internet_message_format_header_fields@internet_message_format_header_fields.inc
+	内部文字コードを、EUC固定からmw_areasetting考慮に修正
+
+	*add:mail_util@mail_util.inc
+	make_mailobj_from_template、make_mailobj_from_template_with_modelを追加
+
+2010-05-23 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:html_parser@html_parser.inc
+	HTMLのエレメントと要素を(おおざっぱに)切り分けてくれるパーサ
+
+	*modify:data_clump@data_clump.inc
+	「database違うのにテーブル名一緒」とかいう奇天烈状態用に、identifier(識別子)の概念を導入
+	下駄雪駄を仕込む
+
+	*modify:data_clump_rdb_adaptor@data_clump_rdb_adaptor.inc
+	DBハンドルの選択肢をidentifier考慮に変更
+
+	*modify:data_clump_kvs_adaptor_base@data_clump_kvs_adaptor_base.inc
+	keyの作成をidentifier考慮に変更
+
+2010-02-12 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify:mobile_info@mobile_info.inc
+	スマフォ対応用にメソッドを追加
+
+	*modify:全てのファイル
+	文字コードをEUCからUTF-8に変更(細かいテストしてないから…is漢字とか多分危ない。あとでチェック)
+
+2010-02-04 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify:db_handle_plural@db_handle_plural.inc
+	「テーブル名によるDBハンドルの振り分け」に対応
+
+	*modify:data_clump_rdb_adaptor@data_clump_rdb_adaptor.inc
+	sql発行を「テーブル名指定」に変更
+
+	*modify:data_handle@data_handle.inc
+	is_mono_rdbメソッド、is_multi_rdbメソッドを追加
+
+	*modify:db_handle@db_handle.inc
+	is_mono_rdbメソッドを追加
+
+2010-12-10 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify:data_clump@data_clump.inc
+	set_all_to_convの時のsmarty対応(とりあえず)
+
+2010-12-09 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:base_model_with_auth@base_model_with_auth.inc
+	追加。今後、こっちを基底クラスにする予定
+
+	*add:di@di.inc
+	DIコンテナ。
+
+	*modify:base_model@base_model.inc
+	get_clump回りを軽く改修
+
+	*modify:mw_smarty@mw_smarty.inc
+	エスケープ処理を追加
+
+	*modify:controller@controller.inc
+	DI回りを追記
+
+2010-09-06 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify:data_clump@data_clump.inc
+
+2010-07-05 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify:db_handle_plural@db_handle_plural.inc
+
+2010-06-09 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:kvs_manager@kvs_manager.inc
+
+	*add:data_clump_manager@data_clump_manager.inc
+
+	*add:data_clump_rdb_adaptor@data_clump_rdb_adaptor.inc
+
+	*add:data_clump_kvs_adaptor_base@data_clump_kvs_adaptor_base.inc
+
+	*add:session_data_kvs_db@session_data_kvs_db.inc
+
+	*add:db_handle_plural@db_handle_plural.inc
+
+	*add:memcache_handle@memcache_handle.inc
+
+	*add:data_clump_adaptor_base@data_clump_adaptor_base.inc
+
+	*add:data_clump_memcache_adaptor@data_clump_memcache_adaptor.inc
+
+	*add:data_clump_apc_adaptor@data_clump_apc_adaptor.inc
+
+	*add:apc_handle@apc_handle.inc
+
+	*add:kvs_handle@kvs_handle.inc
+
+	*add:data_handle@data_handle.inc
+
+	*add:session_data_kvs@session_data_kvs.inc
+
+	*modify:base_mode@base_model.inc
+	DBハンドル、KVSハンドルなどの追加による修正各種
+
+	*modify:db_manager@db_manager.inc
+	マルチハンドルの追加に伴う修正
+
+	*modify:data_clump@data_clump.inc
+	マルチDBハンドル、KVSなどとの融合に伴い修正各種
+
+	*modify:session_data@session_data.inc
+
+	*modify:db_handle@db_handle.inc
+
+	*modify:session_data_db@session_data_db.inc
+
+	*modify:base_model_rich@base_model_rich.inc
+
+2010-05-27 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:estab_table@estab_table.inc
+	確率箱を追加
+
+	*modify:code_util@code_util.inc
+	 62進数を10進数に変換するメソッドを追加
+
+2009-12-10 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:data_clump@data_clump.inc
+	selectedとchecked用のメソッドを追加
+
+	*fix:cgi_request@cgi_request.inc
+	find_cookie_arrayの戻り値が一部、空文字になってたので、空配列に修正	
+
+2009-12-05 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:view@view.inc
+	make_template_filenameメソッドを分解、ディレクトリ作るところとファイルげとるところを分けた
+
+	*add:mw_config@mw_config.inc
+	mapファイルにinclude演算子機能を追加
+
+2009-11-19 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:debug_util@debug_util.inc
+	var_dump_stringメソッドを追加
+
+2009-11-18 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:ip_util@ip_util.inc
+	IPチェック用クラスを追加
+
+	*add:bbs_util@bbs_util.inc
+	掲示板用utilクラスを追加
+
+2009-11-17 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify:crypt_base@crypt_base.inc
+	「形だけの基底クラス」から、必要なものを一式持ち上げた
+
+	*modify:crypt_rijndael256@crypt_rijndael256.inc
+	基底クラスにあちこち持ち上げた
+
+	*add:crypt_base64@crypt_base64.inc
+	これを暗号化と呼んでいいかはどこまでも以下略だが、とりあえずってことで。
+
+	*add:crypt_factory@crypt_factory.inc
+	crypt_base64の追加に伴って
+
+2009-11-14 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:access_analysis_util@access_analysis_util.inc
+	access_analysis_utilクラスの追加
+
+	*modify:mw_smarty@mw_smarty.inc
+	asignメソッドにエスケープ処理を追加 ＆ raw系メソッドを追加
+
+2009-11-13 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:controller@controller.inc
+	only_mobile設定の追加、direct_output系の追加など
+
+	*add:mw_di@mw_di.inc
+	mw_diクラスの追加(まだ未テスト)
+
+2009-11-12 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:base_model@base_model.inc
+	get_clumpメソッド(clumpにset_dbする手間を省くメソッド)を追加
+
+	*add:mw_area_setting@mw_area_setting.inc
+	MW全体にかかる広域設定なsingletonクラスを追加：一端「内部文字エンコード」を所持、あちこちで利用予定
+
+2009-10-09 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify:base_model_rich@base_model_rich.inc
+	認証方式の追加その他細かく色々と修正
+
+2009-09-21 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:calendar_util@calendar_util.inc
+	「指定日付から一ヶ月先まで、のwhere句を作成」する make_one_month メソッドを追加
+
+	*modify:csv_row@csv_row.inc
+	pushなどで、配列を直接受け取れるように機能追加
+
+2009-07-17 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify:security@security.inc
+	sanitize_db_add_quoteで、データが空の時にnullでreturnしないように修正(RDBの思想的にはこっちのほうが正しいはず)
+
+2009-07-14 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:simple_loop@conv_util.inc
+	コンストラクタでdata配列を指定できるように追加
+
+2009-06-05 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:base_model_skeleton@base_model_skeleton.inc
+	画像出力などに用いる、direct_output系メソッドを追加
+
+2009-05-26 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:session_data_manager@session_data_manager.inc
+	セッションdataを保持するためのclass用のマネージャ(まだ未完
+
+	*modify:controller@controller.inc
+	base_path周りを外部から設定出来るように変更。これに伴って「基準ディレクトリの修正が一箇所ですむ」ようになる
+
+	*modify:config_extension@config_extension.inc
+	controllerの修正に伴って、set_base_pathをprotectedからpublicに変更。
+
+	*add:base_model_rich@base_model_rich.inc
+	認証系周りなど大量追加
+
+2009-05-24 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify:base_model_rich@base_model_rich.inc
+	認証周りを一気に修正/追加
+
+2009-05-18 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify:base_model@base_model.inc
+	get_db周りを軽く修正
+
+	*add:config@config.inc
+	isメソッドを追加
+
+	*modify:db@db.inc
+	db_data、db_handleクラスに分解
+
+	*add:db_data@db_data.inc
+	追加
+
+	*add:db_handle@db_handle.inc
+	追加
+
+	*add:db_handle_maps@db_handle_maps.inc
+	追加
+
+	*modify:db_manager@db_manager.inc
+	「複数DBハンドル制御」に向けて修正
+
+2009-04-16 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*modify: controller@controller.inc
+	set_include_pathのセパレータを ':' からPATH_SEPARATORに変更(ご指摘有難うございます)
+
+2008-12-22 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add: mw_math@mw_math.inc
+	数学系クラスを追加
+
+2008-12-07 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: data_clump@data\clump.inc
+	set_radioメソッドを追加
+
+2008-12-06 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: conv@conv.inc.automaton
+	状態遷移版のCONVを追加。マルチプルインスタンスのときに不具合が出るっぽいのでまだ未完ゆえに注意
+
+2008-10-24 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: base_model@base_model.inc
+	is_docomo、is_au(is_ez)、is_softbankの追加
+
+	* add: cgi_request@cgi_request.inc
+	絵文字処理用のインタラプトメソッドinterruption_emojiを追加
+
+	* add: controller@controller.inc
+	get_instanceメソッドの追加及びそれに伴うviewクラスのスイッチ部分の修正及びcgi_requestクラスのスイッチ部分の追加
+
+	* add: emoji_adapter_Text_Pictogram_Mobile@emoji_adapter_Text_Pictogram_Mobile.inc
+	Text_Pictogram_Mobileインスタンス作成用adapterクラス
+
+	* add: view_adapter_Text_Pictogram_Mobile@view_adapter_Text_Pictogram_Mobile.inc
+	view_mobileに絵文字変換を追記するadapterクラス
+
+	* add: cgi_request_adapter_Text_Pictogram_Mobile@cgi_request_adapter_Text_Pictogram_Mobile.inc
+	cgi_requestに絵文字エンコードを追記するadapterクラス
+
+2008-10-22 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: page_controll@page_controll.inc
+	page_controll_base作成に伴って、共通部分を基底クラスに持ち上げ
+
+	* add: page_controll_base@page_controll_base.inc
+	Pageコントロール系基底クラス
+
+	* add: page_controll_limit@page_controll_limit.inc
+	SQLのlimit句を用いたPageコントロール系クラス
+
+2008-10-06 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: data_clump@data_clump.inc
+	get_convメソッドを追加
+
+2008-09-28 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: controller@controller.inc
+	modelのinitializeメソッドで再帰callが呼ばれたときに受け取れるように修正
+
+	* mofidy: base_model_rich@base_model_rich.inc
+	認証の前処理をmodelのinitializeメソッド実行時に行うように修正
+
+2008-09-16 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: debug_util@debug_util.inc
+	backtrace_stringメソッドの追加
+
+2008-08-26 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: calendar@calendar.inc
+	set_stringメソッドのパースパターン追加(yyyymmddhhmmssのパターン)
+
+2008-08-25 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: view@view.inc
+	get_template_filenameメソッド作成による処理の分断化
+
+	* add: base_model@base_model.inc
+	get_convメソッドでのsmarty系処理の追加
+
+	* add: mw_smarty@mw_smarty.inc
+	Smarty系クラスの基底クラス作成
+
+2008-08-12 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add: simple_obj_loop@conv_util.inc
+	「hash配列の配列」ではなくて「convインスタンスの配列」で処理できるsimple_loopクラスの追加
+
+2008-07-29 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* fix: data_clump@data_clump.inc
+	set_value_nowdate と set_value_tokenにおいて引数に誤りがあったのを修正
+
+2008-07-28 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: is@is.inc
+	is_alphanum、is_digitにおいて、正規表現より明らかに早いと思われるctype_系関数に処理を切り替え
+
+	* fix: data_clump@data_clump.inc
+	_make_session_instanceメソッドにおいて、テンポラリテーブルのファイル名が未設定の場合の処理を変更(テーブル名を削除しちゃってた orz)
+	set_to_tmpメソッドにおいて、セッション情報の事前readを行うように修正
+	セッションデータの埋め込みをaddからadd_onceに変更
+
+	* add: data_clump@data_clump.inc
+	delメソッドで「deleteテーブルへの移動」をサポート	
+
+
+2008-07-27 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: page_controll@page_controll.inc
+	テンプレート関連の設定を楽に行うset_to_convメソッドを追加
+
+2008-07-17 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: base_model_rich@base_model_rich.inc
+	携帯系認証において「削除フラグを持たないテーブル」の形式を追加サポート
+
+	* modify: base_model_skeleton@base_model_skeleton.inc
+	recursive_onメソッドにおいて「テンプレートファイル名の削除」処理を追加
+
+2008-07-15 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: base_model@base_model.inc
+	log系において「設定が欠落している時」の処理を追加
+
+2008-07-06 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: config_extension@config_extension.inc
+	拡張書式が可能なconfig_extensionクラスを追加
+
+	* fix: config@config.inc
+	書式でコメントを解してなかったバグを修正。合わせて数カ所チューニング
+
+	* add: controller@controller.inc
+	configファイルの形式を拡張書式可能なconfig_extensionに変更
+
+	* fix: controller@controller.inc
+	携帯の機種判別でdenny Listが認識できなかったバグを修正
+
+	* add: file_util@file_util.inc
+	ファイルのフルパスを「拡張子と」「それ以外」に切り分ける split_filename_by_extension メソッドを追加
+
+	* add: log@log.inc
+	ファイル名を年月日でローテート指定できる set_rotate_filename メソッドを追加
+
+	* add: base_model@base_model.inc
+	configファイルに「template_engine = secure_conv」の指定があった場合、f_convの代わりにsecure_convを使うようにスイッチを追加
+	log インスタンスを取得するget_error_log、get_warning_log、get_debug_logメソッドをそれぞれ追加
+
+2008-07-01 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* fix: data_clump@data_clump.inc
+	setメソッドでDBハンドルからの戻り値がfalseの時にエラー処理出来ていなかったバグを修正
+
+	* modify: data_clump@data_clump.inc
+	set_all_to_convで、convインスタンスがf_convの時とsecure_convの時とで処理をスイッチングするように修正
+
+	* add: empty_mail_cushion@empty_mail_cushion.inc
+	deleteメソッド追加
+
+2008-06-29 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: is@is.inc
+	is_zip、is_telを追加
+
+2008-06-27 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: secure_conv@secure_conv.inc
+	セキュリティに考慮したCONVルーチン「secure_conv」新規追加
+
+	* modify: f_conv@conv.inc
+	コメント整理。合わせてバグ修正(なんでhashで{}つかってるかねPerlじゃあるまいし orz
+
+	* modify: simple_loop@conv_util.inc
+	内部処理をconvからsecure_convに変更(あとでunsecureが必要なら別メソッド追加するかも
+
+2008-06-24 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: calendar_util@calendar_util.inc
+	set_to_convメソッドを追加
+
+2008-06-23 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* fix: data_clump@data_clump.inc
+	get_all_data_to_hash、set_all_to_convの両メソッドにおいて、データがサニタイズされていなかった不具合を修正
+
+	* add: controller@controller.inc
+	configに「user-agent-allow」または「user-agent-denny」がある場合、entrance_checkメソッドのタイミングで機種判定を行う(NGの場合user-agent-disapprove_uriで指定されたURIに遷移させる)
+
+	* add: view_mobile@view_mobile.inc
+	以下の処理を追加
+	・uidが設定されている状態で「DocoMo且つSSL またはPC」の場合、uid=NULLGWDOCOMO及びguid=onの文字列を「uid=uidの文字列」に置換する
+	・DoCoMo以外で且つ携帯からのアクセスの場合、uid=NULLGWDOCOMO及びguid=onの文字列を削除する
+	・get_template_stringにおいて、以下の処理をする
+	・・ファイルの拡張子をtplまたはxtplとし、xtplの場合はXHTMLであると認識する
+	・・テンプレートディレクトリに機種名、キャリア名、"mobile"などの付与を行い、自動的に「尤も適切な」テンプレートを選ぶ
+	・・XHTMLの場合、テンプレート内のxml宣言、DOCTYPE宣言、html宣言を一端削除、キャリア毎に適切なものに差し替える
+	・・XHTMLでDocomoの場合、Content-typeを変える
+
+
+2008-06-22 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: empty_mail_analysis@empty_mail_analysis.inc
+	get_mail_bodyメソッドとそれにまつわる処理を追加
+
+	* add: db_handle@db.inc
+	sql_utilクラスのアクセサであるget_sql_util、set_sql_utilを追加
+
+	* add: mail_util@mail_util.inc
+	エラーメールを自動処理するために使う(return-pathに設定する)メールアドレスを作るmake_verpメソッドを追加
+
+	* add: user_agent_check@user_agent_check.inc
+	設定ファイルを元にチェックするクラスを追加。単体というよりはcontrollerで使われる事を意識している
+
+	* add: conv_util@conv_util.inc
+	配列の中身が空かそうでないかで表記をスイッチングするset_loopメソッドを追加
+
+2008-06-21 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: base_model_skeleton@base_model_skeleton.inc
+	set_mobile、get_mobile(mobile_infoインスタンスのアクセサ)を追加
+
+	* modify: view@view.inc
+	get_template_stringメソッド追加(view_mobile用の布石)
+	出力をprintからechoに変更
+
+2008-06-05 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* fix: simple_loop@conv_util.inc
+	設定がboolean値の時に、falseでも出力してしまう不具合を修正
+
+2008-05-15 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: dice@dice.inc
+	いわゆるTRPGチックな「1d6+2d8+4」的な文字列から乱数を発生させるクラスを追加
+
+2008-04-10 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: base_model_rich@base_model_rich.inc
+	iモードIDの登場とそれに伴うSSL関連の処理に伴って変更：SSLの時は、iモードIDも「uid=」にデータ持たせる
+
+	* add: cgi_param@cgi_param.inc
+	erase_keyメソッドを追加
+
+	* add: multimap@multimap.inc
+	erase_keyメソッドを追加
+
+
+2008-04-01 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: empty_mail_cushion@empty_mail_cushion.inc
+	envelope_fromの設定がないときに「常にfromのアドレスを指定する」ように修正(サーバ設定がおかしいとsoftbank系でこけるので
+
+2008-03-31 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: mobile_info@mobile_info.inc
+	SoftBank系のsidの取得方法を変更。is_terminal_jphone、is_terminal_vodafone、is_terminal_softbankを追加
+
+2008-03-15 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* fix: is@is.inc
+	is_digitのバグを修正(常にtrueしか返さないってか比較する変数間違えてた orz
+
+2008-03-12 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: emoji_ez@emoji_ez.inc
+	とりあえず「実態参照版」に変更。旧来のimgタグ版は以下のemoji_ez_img.incに逃がす
+
+	* all: emoji_ez@emoji_ez_img.inc
+	旧来のimgタグによる版を逃がした
+
+2008-03-10 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: mobile_info@mobile_info.inc
+	ユーザIDの類を取得する処理を追加
+
+2008-03-07 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* fix: multimap@multimap.inc
+	eraseメソッド内の終了条件を変更
+
+	* modify: base_model_rich@base_model_rich.inc
+	auth_ng_processメソッドの中身を変更
+
+2008-02-25 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: code_util@code_util.inc
+	money_formatメソッドを追加
+
+	* add: file_util:file_util.inc
+	read_file_to_arrayメソッドを追加
+
+2008-02-23 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: debug_util@debug_util.inc
+	dump_string_putメソッドを追加
+
+2008-02-18 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: empty_mail_cushion@empty_mail_cushion.inc
+	set_convメソッドを追加 ＆ それに伴って「set_convされてたらnewせずにそっちを使う」ように修正
+
+	* modify: controller@controller.inc
+	コメントを修正 ＆ uncheckingから持ち上げ
+
+2008-02-07 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: base_model_rich@base_model_rich.inc
+	複雑な制御をするbase_model系の基底クラスとして追加
+
+	* modify: base_model_auth@base_model_auth.inc
+	base_model_richクラスを基底にする、facadeっぽい作りに変更
+
+	* modify: base_model_ambiguous_auth@base_model_ambiguous_auth.inc
+	base_model_richクラスを基底にする、facadeっぽい作りに変更
+
+	* modify: base_model_auth_with_mobile@base_model_auth_with_mobile.inc
+	base_model_richクラスを基底にする、facadeっぽい作りに変更
+
+	* modify: base_model_ambiguous_auth_with_mobile@base_model_ambiguous_auth_with_mobile.inc
+	base_model_richクラスを基底にする、facadeっぽい作りに変更
+
+	* add: mobile_info@mobile_info.inc
+	EZ用にサブスクライバID取得処理を追加
+	is_mobileメソッドを追加
+
+2008-02-05 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: to62@code_util.inc
+	tokenizerの内部メソッドだったto62をcode_utilに移動
+
+	* delete: to62@tokenizer.inc
+	上述に伴い、内部メソッドとしてのto62を削除
+
+2008-02-04 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: simple_loop@conv_util.inc
+	配列のネスト、及びboolean値の設定による表示のon/off処理を追加
+
+2008-02-01 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* fix: base_model@base_model.inc
+	DBハンドルを格納するためのbagの名前を間違えていたので修正 orz
+
+	* modify: dbh_mysql@f_mysql.inc
+	connectメソッドで、すでに現在DBハンドルがある場合は処理せずにtrueを返すように修正
+
+2008-01-28 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: page_controll@page_controll.inc
+	表示するPage数を「現在に±ｎPageまで」とかいう時用にmake_rangeメソッドを追加
+
+2008-01-25 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: mw_config_ret@mw_config_ret.inc
+	追加。mapファイル解析の復帰値用。
+
+	* add: mw_config@mw_config.inc
+	追加。mapファイル解析用。
+
+	* add: base_model_skeleton@base_model_skeleton.inc
+	テンプレート系アクセサメソッド追加。
+
+	* delete: base_model@base_model.inc
+	テンプレート系アクセサメソッド削除(上に持ち上げたので)。
+
+	* modify: base_model@base_model.inc
+	make_body_with_convにおいて「引数から文字」を許可。
+	「引数なし(又は空文字)の場合、mapファイルに設定されたtemplateが有効になる」機能のため。
+
+	* modify: controller@controller.inc
+	mapファイルフォーマットの変更に伴う改修。
+
+	* add: simple_put_model@basic_model/simple_put_model.inc
+	シンプルな「htmlテンプレート出力するだけ」クラス追加。
+
+	* add: simple_put_model_auth@basic_model/simple_put_model_auth.inc
+	シンプルな「htmlテンプレート出力するだけ with 認証」クラス追加。
+
+2008-01-24 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* fix: is@is.inc
+	is_digitで。is_numeric関数(PHP標準)が使い物にならないので正規表現系に変更。
+
+	* add: validator@validator.inc
+	validate種別に、number(数字。numericは数値なので、min、maxの解決方向が異なる)を追加
+
+2008-01-21 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: is@is.inc
+	is_dateメソッドを追加
+
+2008-01-18 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* fix: data_clump@data_clump.inc
+	returnがnullなメソッドを!とかでifってたので、お行儀よくis_nullに変更
+
+2008-01-15 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: internet_message_format@internet_message_format.inc
+	文字コードトラブルが多いので、内部エンコードを一端EUCに固定。
+
+2008-01-11 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: guess_from_data_encoding@guess_from_data_encoding.inc
+	文字コード推測クラスを追加
+
+	* add: debug_util@debug_util.inc
+	デバッグ用クラスを追加
+
+2008-01-08 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: controller.inc
+	文字コード推測ルーチンを追加
+	コマンドの１文字目がアンダースコア'_'なら直接はcall出来ないように処理を追加
+
+	* modify: view@view.inc
+	get_bodyメソッドで「modelにbodyデータがあればそれを、無ければget_body_from_convertをcall」するように変更
+
+	* add: view@view.inc
+	get_body_from_convertメソッドを追加
+
+	* modify: internet_message_format_header_fields@internet_message_format_header_fields.inc
+	文字コードを「from EUC to JIS」に変更
+
+	* add: multibyte@multibyte.inc
+	文字コードのfromとtoが明示的に指定できるように各種メソッド追加
+
+2007-12-28 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: validator_util@validator_util.inc
+	あちこち変更(全部内部挙動だけど)
+
+	* add: validator_util_with_conv@validator_util_with_conv.inc
+	is_validメソッド追加
+
+2007-12-27 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: base_mode@base_mode.inc
+	set_tmp_filename,get_tmp_filenameを追加
+
+	* add: basis_clump@basis_clump.inc
+	データエリアの削除用メソッド init_data を追加
+
+2007-12-26 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: data_clump@data_clump.inc
+	set_from_cgiにおいて、中身が空の場合にset_valueをしないように変更
+	set_to_tmp、set_from_tmpにおいて、引数にsession_data_dbインスタンスが指定できるように変更
+
+	* add: data_clump@data_clump.inc
+	PKではなく設定された値から検索出来る get_nopkメソッドを追加
+
+2007-12-25 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: data_clump_validator@data_clump_validator.inc
+	get_validate_objの復帰値を配列からhash配列に変更
+
+	* fix: data_clump_validator@data_clump_validator.inc
+	make_validateでset_cgi_nameの引数のミスを修正
+
+	* modify: cgi_response@cgi_response.inc
+	is_need_convertでDoCoMo用に'application/xhtml+xml'の処理を追加
+	文字列判定にstrpos使ってたので(なんで？)strncmpに変更
+
+	* fix: validator@validator.inc
+	比較に==があったので===に修正
+
+	* add: validator@validator.inc
+	validate出来るtypeにdate(日付タイプ)を追加
+
+	* add: code_util@code_util.inc
+	コード系クラスを追加。文字エンコードには注意すること。
+
+	* fix: conv_util@conv_util.inc
+	simple_loopにおいて配列が空の場合を考慮
+
+2007-12-20 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: internet_message_format_body_base@internet_message_format_body_base.inc
+	メール本文基底クラス追加。
+
+	* add: internet_message_format_body_text@internet_message_format_body_text.inc
+	メール本文テキスト系クラス追加。
+
+	* add: internet_message_format_header_fields@internet_message_format_header_fields.inc
+	メールヘッダクラス追加。
+
+	* add: internet_message_format@internet_message_format.inc
+	メールクラス追加。
+
+	* add: mail_send@mail_send.inc
+	メール送信基底クラス追加。
+
+	* add: mail_send_command@mail_send_command.inc
+	メール送信「sendmailコマンド使用」クラス追加。
+
+	* fix: session_data_db@session_data_db.inc
+	変数がvarになってた orz
+	光の速さでprivateに修正。
+
+	* memo: data_clump_validator@data_clump_validator.inc
+	インデント修正。
+
+	* add: emoji_base@emoji_base.inc
+	絵文字用基底クラス追加。
+
+	* add: emoji_docomo@emoji_docomo.inc
+	docomo用絵文字クラス追加。
+
+	* add: emoji_ez@emoji_ez.inc
+	EZ用絵文字クラス追加。
+
+	* add: emoji_softbank_binary@emoji_softbank_binary.inc
+	SoftBank用絵文字クラス追加。
+
+	* add: emoji_factory@emoji_factory.inc
+	絵文字インスタンス作成用ファクトリクラス追加。
+
+	* add: emoji_convert@emoji_convert.inc
+	絵文字置換クラス追加。
+
+	* add: pg_data@f_pgsql.inc
+	get_rowメソッドを追加。
+
+	* fix: crypt_base@crypt_base.inc
+	initメソッドを追加。
+
+	* fix: data_clump@data_clump.inc
+	initでparentをcallしていない不具合を修正。
+
+	* add: data_clump@data_clump.inc
+	get_all_data_to_hashメソッドを追加。
+
+	* add: base_model_auth_base@base_model_auth_base.inc
+	認証系model基底クラス作成。
+
+	* modify: base_model_auth@base_model_auth.inc
+	base_model_auth_base作成に伴って大半の処理を持ち上げる。
+
+	* add: base_model_ambiguous_auth@base_model_ambiguous_auth.inc
+	「曖昧な認証modelクラス(認証チェックはするが認証してもしなくてもいい)」追加。
+
+	* add: base_model_auth_with_mobile@base_model_auth_with_mobile.inc
+	携帯公式サイト対応(現状DoCoMoのみ)認証modelクラス追加。
+
+	* add: base_model_ambiguous_auth_with_mobile@base_model_ambiguous_auth_with_mobile.inc
+	携帯公式サイト対応(現状DoCoMoのみ)曖昧認証modelクラス追加。
+
+2007-12-19 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: view_mobile@view_mobile.inc
+	携帯用viewクラス追加。出力直前に「絵文字変換」が追加されている。
+
+	* add: mysql_data@f_mysql.inc
+	get_rowメソッドの実態を追加。
+
+2007-12-18 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: mobile_info@mobile_info.inc
+	携帯機種判別クラスを追加。サブスクライバIDの類はまだ取得できない点に注意。
+
+2007-12-14 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: view@view.inc
+	基底クラスにしやすいようにメソッド内を変更。
+
+	* modify: controller@controller.inc
+	viewクラスをconfigファイルによって動的に変更出来るように修正
+
+2007-12-13 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* fix: cgi_param:cgi_param.inc
+	add、add_onceにおいて「nameが空の時に処理を中断する」処理を追加。
+
+	* add: cgi_param:cgi_param.inc
+	get_all_keysメソッドを追加。
+
+2007-12-12 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: multimap@multimap.inc
+	get_all_keysメソッド追加。
+
+2007-12-11 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: security@security.inc
+	sanitize_header_fields_dataメソッド追加。
+
+2007-12-10 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: static_resource_localdisk@static_resource_localdisk.inc
+	静的なリソースを出力するためのクラスを追加。
+
+2007-11-22 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: data_clump@data_clump.inc
+	get_all_data_to_hashメソッド追加。
+
+	* add: data_clump@data_clump.inc
+	全体的にコード書き直し。
+
+	* add: basis_clump@basis_clump.inc
+	data_clumpの基底クラス。
+
+	* add: db_data@db.inc, mysql_data@f_mysql.inc, pg_data@f_pgsql.inc
+	1行分のデータを全部取得するget_rowメソッドを仮想実装ともに追加。
+
+	* modify: multibyte@multibyte.inc
+	initのタイミングでmb_detect_orderを、'eucjp-win,sjis-win,SJIS,EUC-JP,JIS,UTF-8,ASCII'の順番でcall
+	全体的に、SJISをSJIS-winに、EUC-JPをeucJP-winに変更。おおむね「携帯対応」。
+
+	* add: cgi_param@cgi_param.inc
+	find_arrayメソッドを追加。実際にはfindsと等価。
+
+	* add: session_auth_clump@session_auth_clump.inc
+	セッション用のauthテーブル向けclumpクラス追加
+
+	* add: session_base@session_base.inc
+	セッション基底クラス追加。ってかこれないと動かないし orz
+
+	* add: session_data@session_data.inc
+	セッションデータクラス追加。このクラス自体はabstract。
+
+	* add: session_data_db@session_data_db.inc
+	DBにデータを格納するセッションデータクラス追加。
+
+	* add: db_data@db.inc
+	１行全部を取得するget_rowメソッドを追加。
+
+	* add: db_util@db_util.inc
+	db_utilクラス追加。おおむね「シンプルなSQLでざっくりデータがほしい」時用。
+2007-11-21 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* fix: db_mysql@f_mysql.inc, db_manager.inc
+	DBハンドルを所持するクラス名がPEARとぶつかって邪魔くさいので(大文字小文字区別してくれりゃいいのに…)dbh_mysqlに変更
+
+	* fix: db_pgsql@db_manager.inc f_pgsql.inc 
+	DBハンドルを所持するクラス名がPEARとぶつかって邪魔くさいので(大文字小文字区別してくれりゃいいのに…)dbh_pgsqlに変更
+
+
+2007-11-06 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: cgi_request@cgi_request.inc
+	get_fileメソッドを追加。
+
+	* add: cgi_request@cgi_request.inc
+	initに処理追加。newしただけのインスタンスでとりあえず「内部エンコードをEUCと仮定した」multibyteインスタンスを自動で作成。
+
+	* fix: cgi_response@cgi_response.inc
+	putに大雑把なエスケープ処理(\rおよび\nを削除する)を実装。header-Injectionとりあえずこれでなんとか最低限とりあえず。
+
+	* fix: cgi_response@cgi_response.inc
+	set_content_htmlの文字コード処理がコメントアウトされていたので(Perl実装のまま… orz)実装した。
+
+
+2007-11-05 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* memo
+	uncheckingディレクトリ作成。コメントとか返り値とかチェックし切れてないクラス多いし。
+	uncheckingの中のクラスは色々変更の可能性があるので要注意 ＆ 基本的にuncheckingから通常のディレクトリへの移動はChangeLogには書かないです。
+
+2007-11-02 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* memo
+	やっとこさそーすふぉーぢにコミット!!
+
+	* modify: @base_class.inc
+	?>を削除
+
+	* add: @calendar_util.inc
+	カレンダ系ユーティリティクラスを作成
+
+	* add: @mail_util.inc
+	メール系ユーティリティクラスを作成
+
+	* fix: set_content_csv@cgi_response.inc
+	set_content_csvの中がset_headerになってたので(古い仕様)add_headerに修正
+
+	* fix: crypt_rijndael256@crypt_rijndael256.inc
+	cryptメソッド内のmcrypt_create_ivの第二引数において、MCRYPT_DEV_RANDOMで「関数から制御が復帰してこないときがある」のでとりあえずMCRYPT_DEV_URANDOMに変更。
+
+	* add: @empty_mail_analysis.inc
+	新規作成。空メールからfromと「Toのトークン部分」を取り出すクラス。
+
+2007-10-16 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: multibyte@multibyte.inc
+	内部の文字エンコーディングのうち、SJIS,EUC-JPを、それぞれSJIS-win,eucJP-winに変更。
+	おおむね、携帯の絵文字対応。
+
+	* modify: multibyte@multibyte.inc
+	__constructにおいてmb_detect_order追加。
+	順番はとりあえず'eucjp-win,sjis-win,SJIS,EUC-JP,JIS,UTF-8,ASCII'
+
+	* fix: cgi_param@cgi_param.inc
+	add_once。multimap@multimap.incのfindのreturn値修正に伴う不具合対応。
+
+2007-10-01 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: add_session_id.inc
+	URIの末尾にセッションIDを付与するクラス。
+	びみょ?だけど携帯では使うはずなのでやむなく作成。
+
+2007-09-28 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: session_module_login.inc
+	ログイン用の標準モジュール。具体的には「IDとpasswordが入力されてから判定」周り。
+	後でいろいろ増やすだろうけど「とりあえず」ってことで。
+
+	* add: base_model_auth@base_model_auth.inc
+	セッション維持用の標準基底クラス。こいつを継承して、マウントmethodをexecuteからexecute_authにすれば簡単に認証系にできる。
+	configの設定は適宜よろ。
+
+	* add: session_config@session_config.inc
+	is_valueを追加。これは、値が[ on | ok | y[es] | true | allow ]とかいう感じのときにtrue、それ以外でfalseを復帰する。
+
+	* memo: session_config@session_config.inc
+	明らかに後で基底クラスはじき出さないとだよねぇ。イメージは…「デフォルト付コンフィグ(config with a default)」？
+	デフォルト部分だけ切りだしゃ終わりそうだし。
+
+	* add: cgi_request@cgi_request.inc
+	set_priority、get_priorityを追加。
+	基本「Framework用のメソッド」なので、一般使用は激しく非推奨。エラーチェックもしてないし。
+
+	* modify: cgi_request@cgi_request.inc
+	find_cookie_array, find_array。magic_quote対策埋め込んだ(っていうか早く消えてくれmagic_quote…
+
+2007-09-27 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: session_start_login@session_start_login.inc
+	is_memberにおいて、設定ファイルにauth_clump_table_nameを追加、テーブル名の変更を容易にした。
+
+	* add: base_model@base_model.inc
+	make_body_with_convを追加。bag内のconvインスタンスとcnofigファイル内のtemplate_dir＋引数のテンプレートファイル名からbodyを生成するいわゆるお便利系メソッド。
+
+	* fix: multimap@multimap.inc
+	findのエラー復帰をfalse(boolean)からnullに変更。
+
+	* modify: base_model@base_model.inc
+	get_convメソッド追加。convインスタンス取得用に。
+
+	* add: base_model_skeleton@base_model_skeleton.inc
+	再帰callで持ち回りを行うbagインスタンスを追加。実態はとりあえずmultimap
+	あわせて「set_bag(単独：重複は上書き)」「push_bag(配列のように追加)」「get_bag(単値のget)」「get_array_bag(配列取得)」「is_bag(あるかどうか確認)」を追加。
+	ただしset_bagはとりあえず未実装。
+
+	* add: controller@controller.inc
+	鞄インスタンス周りの処理を追加
+
+2007-09-26 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* modify: load_manager@load_manager.inc
+	load_fileにて、エラー捕捉の可不可の問題から、require_onceをinclude_onceに変更しました。
+	あわせて、includeできない場合にfalseを復帰するように処理を追加しました。
+
+	* modify: encrypt_unit.inc
+	crypt_utilに名前を変更。
+	文字サイズをcountで取得しようとしていたのでstrlenに変更 orz
+
+	* modify: encrypted_unit.inc
+	block_cipher_mode_utilに名前を変更。
+	あわせて、先頭に8byteのランダムな文字列を入れるように仕様を変更。
+
+	* add: session.inc 及びsessionクラス郡
+	facadeパターンで、入り口がsessionクラスになる一連のクラスを作成しました。
+	ただ、まだ一部未実装部分があります。
+
+2007-09-13 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* fix: calender@calender.inc
+	get_julianの計算式がおかしかったので修正。復帰値を整数にしました。
+
+	* fix: calender@calender.inc
+	set_julianを、get_julianの修正にあわせて修正しました。
+
+2007-09-11 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* add: calendar@calendar.inc
+	正しい綴りのclassにしました
+
+	* fix: calender@calender.inc
+	綴りが違うので修正 orz
+	calendarが正しい綴りになります
+	calenderだと「壁かけ」とか「つや出し機」とか……… orz
+	しばらくの間、calender.inc、calenderクラスを「calendarクラス」に直接紐付けて場当たり対応しますが、その打ち消しますので、ご注意ください
+
+	* modify: base_model_skeleton@base_model_skeleton.inc
+	classコメントを修正
+
+	* modify: base_model@base_model.inc
+	classコメントを修正
+	メソッドコメントを追加
+
+	* modify: @base_class.inc
+	コメント形式に
+	- @link を追加
+	- @create の内容を $LastChangedDate$ に変更	
+	- @version の内容を $Id$ から $Revision$ に変更
+	- メソッド用のコメントを追加
+
+2007-09-10 michiaki wuzawa <wuzawa@m-fr.net>
+
+	* memo:
+	ChangeLogの書式を決定＆書き始めました。
+

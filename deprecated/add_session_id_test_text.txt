@@ -1,0 +1,9 @@
+あいうえお
+<A href="test.htm">test.html</A>
+<IMG src="img.jpg">
+<FORM action='./form.cgi'></FORM>
+<AA src="hoge.PHp">hogera.php
+<FORM action='./form2.CGI?c=test'>ほげら</FORM>
+<AA
+ src="hoge2.php">hogera2.php
+むげら
