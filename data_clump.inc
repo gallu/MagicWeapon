@@ -1334,7 +1334,7 @@ public function set_all_data_from_hash($datas)
  * @param int $num 加減算させる値
  * @return boolean 成功したらtrue、なにか失敗があったらfalse
  */
-public function set_value_calculation($col, $sign, $num)
+public function update_calculation($col, $sign, $num)
 {
   // 対象項目を設定して
   $this->set_calculation_col_name($col); // XXX ノーチェック。いいよねぇ？
