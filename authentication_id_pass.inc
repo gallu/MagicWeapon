@@ -61,17 +61,17 @@ public function get_raw_password() { return $this->raw_password_; }
 public function set_raw_password($v) { $this->raw_password_ = $v; }
 
 /**
- * authentication_clump名取得
+ * authentication_clump取得
  *
  * @access public
- * @return string authentication_clump名
+ * @return object authentication_clumpのインスタンス
  */
 public function get_authentication_clump() { return $this->authentication_clump_; }
 /**
- * authentication_clump名設定
+ * authentication_clump設定
  *
  * @access public
- * @param string $v authentication_clump名
+ * @param object $v authentication_clumpのインスタンス
  */
 public function set_authentication_clump($v) { $this->authentication_clump_ = $v; }
 
