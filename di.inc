@@ -36,11 +36,11 @@ static public function set_config($fn)
 {
 //print "set_config Trap 1\n";
 
-	//
-	self::$config_obj_ = new config();
+  //
+  self::$config_obj_ = new config();
 
-	//
-	return self::$config_obj_->set_file($fn);
+  //
+  return self::$config_obj_->set_file($fn);
 }
 
 /**
@@ -52,36 +52,38 @@ static public function set_config($fn)
  *
  * @access public
  * @param string $virtual_class_name 仮想的なクラス名
+ * @param string $default di設定ファイルに設定がない場合のデフォルト
  * @return string 解決されたクラス名。設定がなければ virtual_class_name と同じ文字列が返る
  */
-static public function get_name($virtual_class_name)
+static public function get_name($virtual_class_name, $default = '')
 {
   // 処理的になにもできなければそのまま復帰させたいので
   $class_name = $virtual_class_name;
   $inc_name = $virtual_class_name . '.inc';
 
   //
-  if (null !== self::$config_obj_) {
-    // 探してみる
-    $s = self::$config_obj_->find($virtual_class_name);
+  if ((null !== self::$config_obj_)&&('' !== ($s = self::$config_obj_->find($virtual_class_name)) )) {
+    // まず分解
+    list($inc_name, $class_name) = explode(':', $s);
 
-    //
-    if ('' !== $s) {
-      // まず分解
-      list($inc_name, $class_name) = explode(':', $s);
-
-      // 補完
-      // クラス名の補完
-      if ('' === $class_name) {
-        $class_name = $virtual_class_name;
-      }
-      //includeファイル名の補完
-      if ('' === $inc_name) {
-        $inc_name = $class_name . '.inc';
-      } else
-      if ('/' === $inc_name[strlen($inc_name) - 1]) {
-        $inc_name = $inc_name . $class_name . '.inc';
-      }
+    // 補完
+    // クラス名の補完
+    if ('' === $class_name) {
+      $class_name = $virtual_class_name;
+    }
+    //includeファイル名の補完
+    if ('' === $inc_name) {
+      $inc_name = $class_name . '.inc';
+    } else
+    if ('/' === $inc_name[strlen($inc_name) - 1]) {
+      $inc_name = $inc_name . $class_name . '.inc';
+    }
+  } else {
+    // di_configがそもそもない、または設定されていないので、defaultを使う
+    // XXX default設定すらないんなら、virtual_class_nameを使う
+    if ('' !== $default) {
+      // 分解
+      list($inc_name, $class_name) = explode(':', $default);
     }
   }
 //var_dump($class_name);
@@ -102,12 +104,13 @@ static public function get_name($virtual_class_name)
  *
  * @access public
  * @param string $virtual_class_name 仮想的なクラス名
+ * @param string $default di設定ファイルに設定がない場合のデフォルト
  * @return object 解決されたクラス名をnewしたインスタンス。
  */
-static public function create($virtual_class_name)
+static public function create($virtual_class_name, $default = '')
 {
   // まずクラス名を取得
-  $cn = self::get_name($virtual_class_name);
+  $cn = self::get_name($virtual_class_name, $default);
 
   // で、にゅ〜
   return new $cn;
