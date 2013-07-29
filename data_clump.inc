@@ -1323,6 +1323,46 @@ public function set_all_data_from_hash($datas)
   return true;
 }
 
+/*
+ * db_dataオブジェクトからインポート
+ *
+ * XXX 差分とかその他細かいエラーチェックが雑なので注意
+ *
+ * @access public
+ * @param array $res db_dataインスタンス
+ * @return boolean 変な差分があったらfalse。DBカラムが多いとか、clumpの設定が多いとか、その辺
+ */
+public function set_from_dbdata($res)
+{
+  // すべての項目名をげと
+  $all_names = $this->get_all_names();
+  // エラーチェック用込みで
+  $row = $res->get_row();
+
+  // ぶん回して設定
+  foreach($all_names as $key) {
+    // DB name(レコード名)を取得
+    $db_name = $this->get_db_name($key);
+
+    // データの設定
+    $this->set_value($key, $row[$db_name], false);
+
+    // エラーチェック用
+    unset($all_names[$key]);
+    unset($row[$db_name]);
+  }
+// XXX 空のはず。空じゃなければ、なんか漏れてる
+//var_dump($all_names);
+//var_dump($row);
+
+  //
+  if ( (false === empty($all_names))||(false === empty($row)) ) {
+    return false;
+  }
+  // else
+  return true;
+}
+
 /**
  * 数値の加減算
  *

@@ -11,6 +11,10 @@
  * @access  public
  * @author  Michiaki Wuzawa <wuzawa@m-fr.net>
  **/
+
+require_once('data_clump.inc');
+
+
 class mw_sql {
 
 public function __construct()
