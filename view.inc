@@ -179,6 +179,8 @@ protected function get_body_from_convert()
   if (true === is_subclass_of($conv, 'Smarty')) {
     // テンプレートファイル名を取得
     $fn = $this->get_template_filename();
+    // XXX Noticeを抑止
+    error_reporting(E_ALL & ~E_NOTICE);
     // smarty的処理
     $out = $conv->fetch($fn);
   } else { // elseだとconv想定
