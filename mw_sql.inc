@@ -109,7 +109,7 @@ public function bind($name, $value, $type = data_clump::DATATYPE_STRING) {
   $wk['value'] = $value;
   $wk['type'] = $type;
   //
-  $this->datas_[] = $wk;
+  $this->datas_[$name] = $wk;
 }
 
 /**
