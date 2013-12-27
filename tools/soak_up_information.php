@@ -128,7 +128,7 @@ $type_guess = array (
       }
       // Typeの判定
       // XXX ちょいとべただねぇ…
-      list($type, $dummy) = explode('(', $awk['Type'], 2);
+      @list($type, $dummy) = explode('(', $awk['Type'], 2);
       $type = strtoupper($type);
       // 推測
       if (true === isset($type_guess[$type])) {
