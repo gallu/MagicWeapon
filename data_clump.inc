@@ -113,6 +113,10 @@ public function init()
 
   //
   $this->identifier_ = '';
+
+  //
+  $this->insert_date_name_ = '';
+  $this->update_date_name_ = '';
 }
 
 /**
@@ -294,6 +298,29 @@ public function get_selected_item() { return $this->dic_selected_; }
  */
 public function set_checked_item($a) { $this->dic_checed_ = $a; }
 public function get_checked_item() { return $this->dic_checed_; }
+
+
+/**
+ * 「レコード作成日の自動挿入」の作成
+ *
+ * カラム名を設定しておくと、insertのタイミングで自動で日付を設定してくれる
+ *
+ * @access public
+ */
+public function set_insert_date_name($s) { $this->insert_date_name_ = $s; }
+protected function get_insert_date_name() { return $this->insert_date_name_; }
+
+/**
+ * 「レコード修正日の自動挿入」の作成
+ *
+ * カラム名を設定しておくと、updateのタイミングで自動で日付を設定してくれる
+ *
+ * @access public
+ */
+public function set_update_date_name($s) { $this->update_date_name_ = $s; }
+protected function get_update_date_name() { return $this->update_date_name_; }
+
+
 
 
 // XXX 以下、publicだけどprotectedっぽいのでコメントだけ書かないどく
@@ -1014,6 +1041,11 @@ protected function _set_to_datahandle($method)
  */
 public function insert()
 {
+  // レコード作成日付の自動挿入
+  if ('' !== $this->get_insert_date_name()) {
+    $this->set_value_nowdate( $this->get_insert_date_name() );
+  }
+
   return $this->_set_to_datahandle('create');
 }
 
@@ -1029,6 +1061,11 @@ public function insert()
  */
 public function update()
 {
+  // レコード編集日付の自動挿入
+  if ('' !== $this->get_update_date_name()) {
+    $this->set_value_nowdate( $this->get_update_date_name() );
+  }
+
   return $this->_set_to_datahandle('update_all');
 }
 
@@ -1064,6 +1101,12 @@ public function _mono_set_db($target_name)
 {
   // 対象項目を設定して
   $this->push_mono_set_db_target($target_name);
+
+  // 「レコード編集日付の自動挿入」があれば足し込んで
+  if ('' !== $this->get_update_date_name()) {
+    $this->push_mono_set_db_target($this->get_update_date_name());
+    $this->set_value_nowdate( $this->get_update_date_name() );
+  }
 
   // callして
   $ret = $this->_set_to_datahandle('update_mono');
@@ -1406,6 +1449,9 @@ private $nokeyname_;    // Keyではない論理名一式
 private $keyname_;      // Keyになってる論理名一式
 
 private $data_types_;	// DB上の型。int/string/float/dateの識別程度
+
+private $insert_date_name_;	// レコードを作成したときに自動で日付を入れたい時のカラム名
+private $update_date_name_;	// レコードを編集したときに自動で日付を入れたい時のカラム名
 
 
 //
