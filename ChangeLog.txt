@@ -1,3 +1,9 @@
+2013-12-27 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:data_clump@data_clump.inc
+	set_insert_date_name, set_update_date_nameを追加。calculate時が未考慮なので注意。
+
+
 2012-10-04 michiaki wuzawa <wuzawa@m-fr.net>
 
 	*add:base_model@base_model.inc
