@@ -198,7 +198,7 @@ static function is_date($s) {
  * @param string $s 判定する文字列
  * @return boolean 全てカタカナならtrue、異なる文字が含まれていればfalse
  */
-public static function is_katakana($s) {
+static public function is_katakana($s) {
 mb_regex_encoding('euc-jp');
   $ret = mb_ereg("^[アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンガギグゲゴザジズゼゾダヂヅデドバビブベボパポピプペポァィゥェォッャュョー]*$", $s);
   // XXX 暫定なのでとりあえずざっくり
@@ -216,7 +216,7 @@ mb_regex_encoding('euc-jp');
  * @param string $s 判定する文字列
  * @return boolean 郵便番号としてvalidな文字列ならtrue、invalidならfalse
  */
-public function is_zip($s)
+static public function is_zip($s)
 {
   if (preg_match("/^[0-9][0-9][0-9][\- ]?[0-9][0-9][0-9][0-9]$/", $s)) {
     return true;
@@ -233,7 +233,7 @@ public function is_zip($s)
  * @param string $s 判定する文字列(下４桁)
  * @return boolean 郵便番号としてvalidな文字列ならtrue、invalidならfalse
  */
-public function is_zip2($s1, $s2)
+static public function is_zip2($s1, $s2)
 {
   if (3 !== strlen($s1)) {
     return false;
@@ -253,7 +253,7 @@ public function is_zip2($s1, $s2)
  * @param string $s 判定する文字列
  * @return boolean 電話番号としてvalidな文字列ならtrue、invalidならfalse
  */
-public function is_tel($s)
+static public function is_tel($s)
 {
   if (preg_match("/^0[0-9]{1,4}[\- ]?[0-9]{1,4}[\- ]?[0-9]{4}$/", $s)) {
     return true;
