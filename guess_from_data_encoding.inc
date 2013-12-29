@@ -107,7 +107,8 @@ public function guess()
   // XXX とりあえず推測順番きめうち。後でメソッドにはじき出す？
   // XXX あと第三引数の「厳格なエンコーディング検出」がもうひとつ不明
   //$ec = mb_detect_encoding($target_string, 'sjis-win,eucjp-win,SJIS,EUC-JP,JIS,UTF-8,ASCII');
-  $ec = mb_detect_encoding($target_string,'JIS,eucjp-win,UTF-8,sjis-win,ASCII');
+  //$ec = mb_detect_encoding($target_string,'JIS,eucjp-win,UTF-8,sjis-win,ASCII');
+  $ec = mb_detect_encoding($target_string,'JIS,UTF-8,sjis-win,eucjp-win,ASCII');
 
   // 推測結果を格納
   $this->set_encoding_string($ec);
