@@ -213,12 +213,16 @@ public function query_prepared($sql) {
     // typeを判定
     if (data_clump::DATATYPE_INT === $wk['type']) {
       $type = PDO::PARAM_INT;
+      // 値の型を整えておく
+      $wk['value'] = intval($wk['value']);
     } else
     if (data_clump::DATATYPE_DATE === $wk['type']) {
       $type = PDO::PARAM_STR; // XXX 日付、ってないもんかね？
     } else
     if (data_clump::DATATYPE_FLOAT === $wk['type']) {
       $type = PDO::PARAM_INT; // INTだけど整数だけぢゃなくて小数もいけるんだねぇ…
+      // 値の型を整えておく
+      $wk['value'] = floatval($wk['value']);
     } else {
       $type = PDO::PARAM_STR;
     }
