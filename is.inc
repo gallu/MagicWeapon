@@ -28,12 +28,13 @@ class is
  * @return boolean 全て英数字ならtrue、異なる文字が含まれていればfalse
  */
 static public function is_alphanum($s){
-/*
-  if (ereg ("[^0-9a-zA-Z]", $s)) {
-    return false;
+  // 引数が整数型なら速やかにOK
+  // XXX 小数はどうすっかねぇ？
+  if (true === is_int($s)) {
+    return true;
   }
-  return true;
-*/
+
+  //
   return ctype_alnum($s);
 }
 
@@ -47,12 +48,12 @@ static public function is_alphanum($s){
  * @return boolean 全て数字ならtrue、異なる文字が含まれていればfalse
  */
 static public function is_digit($num){
-/*
-  if (ereg ("[^0-9]", $num)) {
-    return false;
+  // 引数が整数型なら速やかにOK
+  // XXX 小数はどうすっかねぇ？
+  if (true === is_int($s)) {
+    return true;
   }
-  return true;
-*/
+  //
   return ctype_digit($num);
 }
 
