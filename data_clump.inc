@@ -1285,7 +1285,8 @@ public function set_all_to_conv($conv)
 
   foreach($this->get_all_data_to_hash() as $name => $value) {
     // $nameを「cgi側の名前」にする
-    $name = $this->get_cgi_name($name);
+    // XXX cgi_nameが設定されていない(extraな値)も含まれるので、自力でprefixとsuffixを付ける
+    $name = $this->get_cgi_name_prefix() . $name . $this->get_cgi_name_suffix(); 
 
     // 単置換用
     if ('f_conv' === $cn) {
