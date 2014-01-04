@@ -702,6 +702,9 @@ public function _is_valid(array $targets, $conv = null)
       continue;
     }
 
+    // エラーメッセージはcgi_nameにしておく
+    $cgi_name = $this->get_cgi_name($name);
+
     // 先に範囲チェック
     // XXX 空文字なら無判定。判定が必要ならMUSTとか入ってるっしょ？ きっと。
     if ('' !== $value) {
@@ -723,7 +726,8 @@ public function _is_valid(array $targets, $conv = null)
         if ($min > $len) {
           $flg = false;
           $conv->multiDic('if_error', new simple_put());
-          $conv->multiDic('if_error_min_' . $name, new simple_put());
+          $conv->multiDic('if_error_' . $cgi_name, new simple_put());
+          $conv->multiDic('if_error_min_' . $cgi_name, new simple_put());
         }
       }
 
@@ -732,7 +736,8 @@ public function _is_valid(array $targets, $conv = null)
         if ($max < $len) {
           $flg = false;
           $conv->multiDic('if_error', new simple_put());
-          $conv->multiDic('if_error_max_' . $name, new simple_put());
+          $conv->multiDic('if_error_' . $cgi_name, new simple_put());
+          $conv->multiDic('if_error_max_' . $cgi_name, new simple_put());
         }
       }
     }
@@ -743,7 +748,8 @@ public function _is_valid(array $targets, $conv = null)
       if (0 == strlen($value)) {
         $flg = false;
         $conv->multiDic('if_error', new simple_put());
-        $conv->multiDic('if_error_must_' . $name, new simple_put());
+        $conv->multiDic('if_error_' . $cgi_name, new simple_put());
+        $conv->multiDic('if_error_must_' . $cgi_name, new simple_put());
       }
     }
 
@@ -753,9 +759,10 @@ public function _is_valid(array $targets, $conv = null)
     if ((self::V_NUMERIC & $type) || (self::V_DIGIT & $type) ) {
       if (false == is::is_digit($value)) {
         $flg = false;
-        $conv->multiDic('if_error_' . $name, new simple_put());
-        $conv->multiDic('if_error_numeric_' . $name, new simple_put());
-        $conv->multiDic('if_error_digit_' . $name, new simple_put());
+        $conv->multiDic('if_error', new simple_put());
+        $conv->multiDic('if_error_' . $cgi_name, new simple_put());
+        $conv->multiDic('if_error_numeric_' . $cgi_name, new simple_put());
+        $conv->multiDic('if_error_digit_' . $cgi_name, new simple_put());
       }
     }
 
@@ -765,7 +772,8 @@ public function _is_valid(array $targets, $conv = null)
       if (false == ctype_alpha($value)) {
         $flg = false;
         $conv->multiDic('if_error', new simple_put());
-        $conv->multiDic('if_error_alpha_' . $name, new simple_put());
+        $conv->multiDic('if_error_' . $cgi_name, new simple_put());
+        $conv->multiDic('if_error_alpha_' . $cgi_name, new simple_put());
       }
     }
 
@@ -774,6 +782,7 @@ public function _is_valid(array $targets, $conv = null)
       if (false == is::is_alphanum($value)) {
         $flg = false;
         $conv->multiDic('if_error', new simple_put());
+        $conv->multiDic('if_error_' . $cgi_name, new simple_put());
         $conv->multiDic('if_error_alphanum_' . $name, new simple_put());
       }
     }
@@ -783,7 +792,8 @@ public function _is_valid(array $targets, $conv = null)
       if (false == is::is_zip($value)) {
         $flg = false;
         $conv->multiDic('if_error', new simple_put());
-        $conv->multiDic('if_error_zip_' . $name, new simple_put());
+        $conv->multiDic('if_error_' . $cgi_name, new simple_put());
+        $conv->multiDic('if_error_zip_' . $cgi_name, new simple_put());
       }
     }
 
@@ -792,7 +802,8 @@ public function _is_valid(array $targets, $conv = null)
       if (false == is::is_email($value)) {
         $flg = false;
         $conv->multiDic('if_error', new simple_put());
-        $conv->multiDic('if_error_email_' . $name, new simple_put());
+        $conv->multiDic('if_error_' . $cgi_name, new simple_put());
+        $conv->multiDic('if_error_email_' . $cgi_name, new simple_put());
       }
     }
 
@@ -803,7 +814,8 @@ public function _is_valid(array $targets, $conv = null)
       if (false == $cal_obj->is()) {
         $flg = false;
         $conv->multiDic('if_error', new simple_put());
-        $conv->multiDic('if_error_date_' . $name, new simple_put());
+        $conv->multiDic('if_error_' . $cgi_name, new simple_put());
+        $conv->multiDic('if_error_date_' . $cgi_name, new simple_put());
       }
     }
 
