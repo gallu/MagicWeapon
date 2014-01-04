@@ -117,6 +117,10 @@ public function init()
   //
   $this->insert_date_name_ = '';
   $this->update_date_name_ = '';
+
+  // 接頭接尾のクリア
+  $this->set_cgi_name_prefix('');
+  $this->set_cgi_name_suffix('');
 }
 
 /**
@@ -182,6 +186,29 @@ public function set_session_table_name($s) { $this->tmpname_ = $s; }
  * @return string テーブル名
  */
 public function get_session_table_name() { return $this->tmpname_; }
+
+/**
+ * cgi名に付ける前置詞
+ * 
+ * 「複数個」の同じような情報があり、1対nのケースの時なんかに使う
+ *
+ * @access public
+ * @param string $v 前置詞
+ */
+public function set_cgi_name_prefix($v) { $this->cgi_name_prefix_ = $v; }
+public function get_cgi_name_prefix() { return $this->cgi_name_prefix_; }
+
+/**
+ * cgi名に付ける接尾辞
+ * 
+ * 「複数個」の同じような情報があり、1対nのケースの時なんかに使う
+ *
+ * @access public
+ * @param string $v 接尾辞
+ */
+public function set_cgi_name_suffix($v) { $this->cgi_name_suffix_ = $v; }
+public function get_cgi_name_suffix() { return $this->cgi_name_suffix_; }
+
 
 
 /**
@@ -333,7 +360,9 @@ public function set_tmp_name($n, $v) { $this->tmp_name_[$n] = $v; }
 public function get_tmp_name($n) { return $this->tmp_name_[$n]; }
 // cgi form名のアクセサ
 public function set_cgi_name($n, $v) { $this->cgi_name_[$n] = $v; }
-public function get_cgi_name($n) { return $this->cgi_name_[$n]; }
+public function get_cgi_name_plain($n) { return $this->cgi_name_[$n]; }
+public function get_cgi_name($n) { return $this->get_cgi_name_prefix() . $this->cgi_name_[$n] . $this->get_cgi_name_suffix(); }
+
 // keyname関連
 public function push_keyname($n) { $this->keyname_[] = $n; }
 public function get_all_key_names()   { return $this->keyname_; }
@@ -1237,6 +1266,9 @@ public function set_all_to_conv($conv)
 //var_dump($cn);
 
   foreach($this->get_all_data_to_hash() as $name => $value) {
+    // $nameを「cgi側の名前」にする
+    $name = $this->get_cgi_name($name);
+
     // 単置換用
     if ('f_conv' === $cn) {
       $conv->monoDic($name, security::sanitize_html($value));
@@ -1452,6 +1484,9 @@ private $data_types_;	// DB上の型。int/string/float/dateの識別程度
 
 private $insert_date_name_;	// レコードを作成したときに自動で日付を入れたい時のカラム名
 private $update_date_name_;	// レコードを編集したときに自動で日付を入れたい時のカラム名
+
+private $cgi_name_prefix_;	// 複数個段組の時などの、form側の名前のprefix
+private $cgi_name_suffix_;	// 複数個段組の時などの、form側の名前のsuffix
 
 
 //
