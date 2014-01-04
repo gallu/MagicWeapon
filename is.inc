@@ -50,7 +50,7 @@ static public function is_alphanum($s){
 static public function is_digit($num){
   // 引数が整数型なら速やかにOK
   // XXX 小数はどうすっかねぇ？
-  if (true === is_int($s)) {
+  if (true === is_int($num)) {
     return true;
   }
   //
