@@ -534,6 +534,7 @@ public function push_element
  *
  * pkを含む総てのデータに対してvalidationする
  * 実態は input用validate
+ * XXX テンプレート指示子の名前は「cgi名になる」点に留意
  *
  * @access public
  * @param conv $conv テンプレートエンジンのインスタンス
@@ -551,6 +552,7 @@ public function is_valid($conv = null)
  *
  * pkを含む総てのデータに対してvalidationする
  * MWの世界観じゃやらんのだけど。auto incrimentの時はこれ使えないから気をつけてね。update使って。
+ * XXX テンプレート指示子の名前は「cgi名になる」点に留意
  *
  * @access public
  * @param conv $conv テンプレートエンジンのインスタンス
@@ -568,6 +570,7 @@ public function is_valid_insert($conv = null)
  * update用validate
  *
  * pk以外の総てのデータに対してvalidationする
+ * XXX テンプレート指示子の名前は「cgi名になる」点に留意
  *
  * @access public
  * @param conv $conv テンプレートエンジンのインスタンス
@@ -618,6 +621,7 @@ public function push_validate($inname, $type, $param = '')
  *
  * validate処理の本体を行うところ
  * より正確には「基本的なvalidationを行う」ところ。
+ * XXX テンプレート指示子の名前は「cgi名になる」点に留意
  *
 
 テンプレート条件
@@ -680,6 +684,7 @@ public function _is_valid(array $targets, $conv = null)
   }
 
   // XXX とりあえずぶち込むかなぁ
+  // XXX 冗長なので削除したほうがいいかも
   $this->set_all_to_conv($conv);
 
   // ぶん回してチェック
@@ -1267,6 +1272,7 @@ public function get_all_data_to_hash($extra_param = array())
  *
  * XXX 平たくお便利系メソッド
  * XXX get_all_data_to_hashのデータを基準にしてみる：この方が継承時に楽
+ * XXX テンプレート指示子の名前は「cgi名になる」点に留意
  *
  * @access public
  * @param convインスタンス $conv 置換エンジンインスタンス
