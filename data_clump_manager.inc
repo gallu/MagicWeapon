@@ -38,19 +38,19 @@ static public function get_instance_without_datahandle($name, $o = null)
 
 
 /**
- * data_clumpインスタンス取得
+ * data_clumpインスタンスへの、data handle系の設定
  *
  * @access public
  * @param 
  * @return 
 */
-static public function get_instance($name, $o = null)
+static public function set_datahandle($o)
 {
-  // インスタンス取得
-  $o = self::get_instance_without_datahandle($name, $o);
-
   // データハンドル系を、設定に基づいてぶち込む
   // -------------------------------------------------
+
+  // クラス名を先に把握
+  $name = get_class($o);
 
   // まず設定を取得
   // XXX 設定がない場合「第一レイヤー：RDB」とみなす
@@ -108,6 +108,23 @@ static public function get_instance($name, $o = null)
   }
 
   // できたよ〜
+  return $o;
+}
+
+/**
+ * data_clumpインスタンス取得
+ *
+ * @access public
+ * @param
+ * @return
+*/
+static public function get_instance($name, $o = null)
+{
+  // インスタンス取得
+  $o = self::get_instance_without_datahandle($name, $o);
+  // data handle設定
+  $o = self::set_datahandle($o);
+  //
   return $o;
 }
 
