@@ -1482,6 +1482,12 @@ public function update_calculation($col, $sign, $num)
   return $ret;
 }
 
+protected function _get_property_list() {
+  $p = parent::_get_property_list();
+  $p = array_merge($p, array_keys(get_object_vars($this)));
+  return $p;
+}
+
 
 //private:
 private $dbh_;          // DBハンドル

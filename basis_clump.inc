@@ -119,6 +119,11 @@ public function push_element($n)
   return true;
 }
 
+protected function _get_property_list() {
+  $p = array_keys(get_object_vars($this));
+  return $p;
+}
+
 //private:
 private $data_;		// データ一式
 private $allname_;	// 論理名一式全部
