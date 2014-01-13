@@ -213,6 +213,20 @@ public function set_content_csv($filename)
 }
 
 /**
+ * PDFファイル用
+ *
+ * @access public
+ * @param string $filename ファイル名
+ */
+public function set_content_pdf($filename)
+{
+  $this->set_content("application/pdf");
+  $this->add_header('Content-Disposition', 'attachment; filename=' . $filename . ';');
+
+  return true;
+}
+
+/**
  * Location設定
  *
  * これを設定するとほかの結構なheader設定が無意味になるので注意すること

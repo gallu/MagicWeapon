@@ -1,8 +1,12 @@
+2014-01-13 michiaki wuzawa <wuzawa@m-fr.net>
+
+	*add:cgi_response@cgi_response.inc
+	set_content_pdfメソッドを追加。
+
 2013-12-27 michiaki wuzawa <wuzawa@m-fr.net>
 
 	*add:data_clump@data_clump.inc
 	set_insert_date_name, set_update_date_nameを追加。calculate時が未考慮なので注意。
-
 
 2012-10-04 michiaki wuzawa <wuzawa@m-fr.net>
 
