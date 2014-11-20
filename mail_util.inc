@@ -30,7 +30,7 @@ class mail_util {
  */
 static public function carve_address($s)
 {
-  if (1 === preg_match('/[<](.*?)[>]/', $s, $mt)) {
+  if (1 === preg_match('/[<](.*)[>]/', $s, $mt)) {
     return $mt[1];
   }
   // else
