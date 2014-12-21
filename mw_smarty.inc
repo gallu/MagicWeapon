@@ -59,6 +59,11 @@ protected function _esc($str){
     if (true === is_string($str) ) {
       return htmlspecialchars($str,ENT_QUOTES);
     }
+    // else
+    if ( (is_object($str))&&(is_a($str, 'template_raw_string')) ) {
+      // 例外的に「エスケープしない生の出力にしたい」ケース用
+      return $str->get_string();
+    }
     //else
     return $str;
   }
