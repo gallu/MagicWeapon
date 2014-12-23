@@ -139,6 +139,55 @@ static public function is_digit($num){
       return false;
     }
     return true;
+/*
+
+
+function is_domain($s) {
+  // 文字長取得
+  $len = strlen($s);
+
+  // XXX もうちょっとminが長い気もするんだが…とりあえず「セカンドレベル１文字＋TLD２文字」をminとして想定
+  // XXX 暫定なので、後で多分書き換える
+  if (4 > $len) {
+    return false;
+  }
+
+  // １文字目
+  if (false === ctype_alpha($s[0])) {
+    return false;
+  }
+
+  // ２文字目以降
+  $period_flg = false;
+  for($i = 1; $i < $len; $i ++) {
+    // 文字把握
+    $c = $s[$i];
+
+    // 英数またはハイフンならOK
+    if (ctype_alnum($c) || ('-' === $c)) {
+      $period_flg = false;
+      continue;
+    }
+    // 「連続していない」ピリオドならOK
+    if ( (false === $period_flg)&&('.' === $c) ) {
+      $period_flg = true;
+      continue;
+    }
+    // else
+    return false;
+  }
+
+  // 最後の文字
+  if (false === ctype_alnum($s[$len - 1])) {
+    return false;
+  }
+
+  // 一通り通ったのでOK
+  return true;
+}
+
+*/
+
   }
 
 /**
