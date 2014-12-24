@@ -174,7 +174,7 @@ public function login()
     $num ++;
     $obj->set_value('err_count', $num);
     // 一定回数に達したら、ログインロック
-    if ($this->get_err_count() >= $num) {
+    if ($this->get_err_count() < $num) {
       // ロック解除時間を設定
       $obj->set_value('lock_time', time() + $this->get_lock_time());
       // 「ロックした」のでtrueに
@@ -189,7 +189,7 @@ public function login()
 
   // ロックカウントが１以上なら、クリアしておく
   if (0 < $obj->get_value('err_count')) {
-    $obj->set_value('err_count', 0);
+    $obj->set_value('err_count', 0, true);
   }
 
   // ログインはOKだったよ? ノ
