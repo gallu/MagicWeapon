@@ -158,7 +158,7 @@ public function login()
   // ログインロック時間の確認
   if (0 != $obj->get_value('lock_time')) {
     // 時間経過が一定未満ならNG
-    if (time() >= $obj->get_value('lock_time')) {
+    if (time() <= $obj->get_value('lock_time')) {
       return false;
     }
     // else
