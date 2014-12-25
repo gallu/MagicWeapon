@@ -1241,6 +1241,8 @@ public function get_nopk()
 /**
  * 情報をハッシュ配列にして取得
  *
+ * XXX 「data」なので、デバッグ以外ではあんまり使わない想定で。get_all_view_values() をメインで使って下さい。
+ *
  * @access public
  * @param 追加要素 $extra_param 追加的要素用の文字列
  * @return map ハッシュ配列
@@ -1266,6 +1268,38 @@ public function get_all_data_to_hash($extra_param = array())
   //
   return $ret;
 }
+
+/**
+ * 「表示用のデータ」を一式
+ *
+ * 表示につかう「情報の配列」を作る用のメソッド
+ * XXX ベースはget_all_data_to_hash()と一緒だけど意味が違うので、現状同じコードをcopyで
+ *
+ * @access public
+ * @param 追加要素 $extra_param 追加的要素用の文字列
+ * @return map ハッシュ配列
+ */
+public function get_all_view_values($extra_param = array()) {
+  $ret = array();
+  // まずはすべての項目名をげと
+  $all_names = $this->get_all_names();
+
+  // で、設定
+  foreach($all_names as $name) {
+    $ret[$name] = $this->get_value($name);
+  }
+
+  // 追加があればそちらも
+  if (false === empty($extra_param)) {
+    foreach($extra_param as $name) {
+      $ret[$name] = $this->get_value($name);
+    }
+  }
+
+  //
+  return $ret;
+}
+
 
 /**
  * monoDicでデータ一式を設定する
