@@ -1305,7 +1305,7 @@ public function get_all_view_values($extra_param = array()) {
  * monoDicでデータ一式を設定する
  *
  * XXX 平たくお便利系メソッド
- * XXX get_all_data_to_hashのデータを基準にしてみる：この方が継承時に楽
+ * XXX get_all_view_values() のデータを基準にしてみる：この方が継承時に楽
  * XXX テンプレート指示子の名前は「cgi名になる」点に留意
  *
  * @access public
@@ -1317,7 +1317,7 @@ public function set_all_to_conv($conv)
   $cn = get_class($conv);
 //var_dump($cn);
 
-  foreach($this->get_all_data_to_hash() as $name => $value) {
+  foreach($this->get_all_view_values() as $name => $value) {
     // $nameを「cgi側の名前」にする
     // XXX cgi_nameが設定されていない(extraな値)も含まれるので、自力でprefixとsuffixを付ける
     $name = $this->get_cgi_name_prefix() . $name . $this->get_cgi_name_suffix(); 
@@ -1404,7 +1404,9 @@ public function set_value_token_with_ip($name, $flg = false)
  *
  * secure_convインスタンスを返す。
  * 後で、smarty系のインスタンスも返せるように作り直すか？
+ * 非推奨
  *
+ * @deprecated
  * @access public
  * @param string $name トークンを設定したいカラム名
  * @return convインスタンス 置換エンジンインスタンス
