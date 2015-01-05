@@ -256,6 +256,40 @@ public function redirect($path, $http_status=302) {
   $this->direct_output_on();
 }
 
+/**
+ * cgi requestからの情報取得＋get_convでとれるインスタンスへの情報のセット
+ *
+ * XXX 所謂お便利メソッド
+ *
+ * @access public
+ * @param string $k key名
+ * @return string 得られた値(詳細はcgi_requestクラスのfindを参照
+ */
+public function get_from_cgi($k) {
+  $s = $this->get_cgi_request()->find($k);
+  $this->get_conv()->set($k, $s);
+  //
+  return $s;
+}
+
+/**
+ * cgi requestからの情報取得＋get_convでとれるインスタンスへの情報のセット、の配列版(checkbox用)
+ *
+ * XXX 所謂お便利メソッド
+ *
+ * @access public
+ * @param string $k key名
+ * @return array 得られた値(詳細はcgi_requestクラスのfind_arrayを参照
+ */
+public function get_from_cgi_array($k) {
+  $s = $this->get_cgi_request()->find_array($k);
+  $this->get_conv()->set($k, $s);
+  //
+  return $s;
+}
+
+
+
 
 //private:
 } // end of class
