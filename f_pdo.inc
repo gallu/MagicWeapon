@@ -79,6 +79,19 @@ public function get_row() {
   return $this->row_;
 }
 
+/**
+ * 影響行数の取得
+ *
+ * UPDATE, INSERT, DELETEの影響行数を把握する
+ *
+ * @access public
+ * @return int 行数
+ */
+public function get_row_count() {
+  return $this->res_->rowCount();
+}
+
+
 
 //private:
 private $res_;
@@ -315,6 +328,19 @@ public function rollback()
   return true;
 }
 
+
+/**
+ * エスケープ処理メソッド
+ *
+ * @deprecated
+ * @access public
+ * @param string $s エスケープしたい文字列
+ * @return string エスケープされた文字列
+ */
+public function escape($s)
+{
+  return $this->conn_->quote($s);
+}
 
 
 //private:
