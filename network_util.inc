@@ -22,6 +22,13 @@ class network_util {
  */
 static public function get_local_ip($eth = 'eth0')
 {
+  // 複数回callの可能性があるので、チューニング用に
+  static $ip = array();
+  if (true === isset($ip[$eth])) {
+    return $ip[$eth];
+  }
+  // else
+
   // 情報げとって
   $base = `/sbin/ifconfig {$eth}`;
 //var_dump($base);
@@ -38,7 +45,8 @@ static public function get_local_ip($eth = 'eth0')
 //var_dump($s);
 
   // IPっぽい場所を取得
-  return $s;
+  $ip[$eth] = $s;
+  return $ip[$eth];
 }
 
 
