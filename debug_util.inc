@@ -17,11 +17,11 @@ class debug_util {
  * 文字列のcharコード出力
  *
  * @access public
- * @param string& $s 出力したい文字列への参照
+ * @param string $s 出力したい文字列
  * @param boolean $flg ここがtrueなら元文字列も出力、falseなら未出力
  * @return string 出力用文字列
  */
-static public function dump_string(&$s, $flg = true)
+static public function dump_string($s, $flg = true)
 {
 //var_dump($s);
   $len = strlen($s);
@@ -40,10 +40,10 @@ static public function dump_string(&$s, $flg = true)
  * 文字列のcharコード出力:stdoutらっぱー
  *
  * @access public
- * @param string& $s 出力したい文字列への参照
+ * @param string $s 出力したい文字列
  * @param boolean $flg ここがtrueなら元文字列も出力、falseなら未出力
  */
-static public function dump_string_put(&$s, $flg = true)
+static public function dump_string_put($s, $flg = true)
 {
   print debug_util::dump_string($s, $flg) . "\n";
 }
