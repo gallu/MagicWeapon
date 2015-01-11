@@ -259,6 +259,51 @@ mb_regex_encoding('euc-jp');
   return true;
 }
 
+
+/**
+ * カタカナかどうか判定(UTF-8用)
+ *
+ * @access public
+ * @param string $s 判定する文字列
+ * @return boolean 全てカタカナならtrue、異なる文字が含まれていればfalse
+ */
+static public function is_katakana_utf8($s) {
+  // XXX …ど～だろ
+  mb_regex_encoding('UTF-8');
+  $ret = mb_ereg("\A[ァ-ヾ]+\z", $s);
+
+  // XXX 暫定なのでとりあえずざっくり
+  if (false === $ret) {
+    return false;
+  }
+  // else
+  return true;
+}
+
+/**
+ * ひらがなかどうか判定(UTF-8用)
+ *
+ * 長音は許可するよ～
+ *
+ * @access public
+ * @param string $s 判定する文字列
+ * @return boolean 全てカタカナならtrue、異なる文字が含まれていればfalse
+ */
+static public function is_kana_utf8($s) {
+  // XXX …ど～だろ
+  mb_regex_encoding('UTF-8');
+  $ret = mb_ereg("\A[ぁ-ゞー]+\z", $s);
+
+  // XXX 暫定なのでとりあえずざっくり
+  if (false === $ret) {
+    return false;
+  }
+  // else
+  return true;
+}
+
+
+
 /**
  * 郵便番号判定(日本)
  *
