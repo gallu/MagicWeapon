@@ -32,6 +32,7 @@ data_clump::V_ALPNUM   // 英数字(パラメタは文字数(バイト数)を表
 data_clump::V_POST     // 郵便番号(nnn-nnnn、nnnnnnn、nnn nnnnの３パターンフォロー
 data_clump::V_DATE     // 日付
 data_clump::V_M_STRING // 全角交じりの文字列(サイズのチェックを 全角:2文字 半角:1文字として扱う
+data_clump::V_KATAKANA_UTF8 // UTF-8文字コードのカタカナ(文字長の規定はしてないんで、基本、V_M_STRINGと一緒がいいと思う)
   */
 
   // validateの設定

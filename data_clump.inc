@@ -59,6 +59,7 @@ const V_POST     =   64; // 郵便番号(nnn-nnnn、nnnnnnn、nnn nnnnの３パ�
 const V_EMAIL1   =  128; // メアド XXX 若干悩んでるので、どちらかというと非推奨
 const V_DATE     =  256; // 日付
 const V_M_STRING =  512; // 全角交じりの文字列(サイズのチェックを 全角:2文字 半角:1文字として扱う
+const V_KATAKANA_UTF8 = 1024; // UTF-8文字コードのカタカナ(文字長の規定はしてないんで、基本、V_M_STRINGと一緒がいいと思う)
 
 // DB用変数の型
 // XXX 論理和とかあり得ないから連番で
@@ -598,6 +599,7 @@ const V_POST     =   64; // 郵便番号(nnn-nnnn、nnnnnnn、nnn nnnnの３パ�
 const V_EMAIL1   =  128; // メアド
 const V_DATE     =  256; // 日付
 const V_M_STRING =  512; // 全角交じりの文字列(サイズのチェックを 全角:2文字 半角:1文字として扱う
+const V_KATAKANA_UTF8 = 1024; // UTF-8文字コードのカタカナ(文字長の規定はしてないんで、基本、V_M_STRINGと一緒がいいと思う)
 
  *
  *
@@ -668,6 +670,8 @@ $$$if_error_zip_hoge$$$
 $$$if_error_email_hoge$$$
 メアドだよメアド
 
+$$$if_error_katakana_hoge$$$
+カタカナじゃないとヤダ
 
  * @access public
  * @param array $target 対象になるデータ
@@ -824,7 +828,17 @@ public function _is_valid(array $targets, $conv = null)
       }
     }
 
-  }
+    // カタカナ(UTF-8)
+    if (self::V_KATAKANA_UTF8 & $type) {
+      if (false == is::is_katakana_utf8($value)) {
+        $flg = false;
+        $conv->multiDic('if_error', new simple_put());
+        $conv->multiDic('if_error_' . $cgi_name, new simple_put());
+        $conv->multiDic('if_error_katakana_' . $cgi_name, new simple_put());
+      }
+    }
+
+  } // end of foreach
 
   //
   return $flg;
