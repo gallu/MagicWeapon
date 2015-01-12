@@ -29,3 +29,28 @@ function assertIdentical($b1, $b2) {
   assertIdentical(is::is_kana_utf8('あ'), true);
   assertIdentical(is::is_kana_utf8('あいう'), true);
   assertIdentical(is::is_kana_utf8('あーん'), true);
+
+  // ドメイン
+  assertIdentical(is::is_domain('test.com'), true);
+  assertIdentical(is::is_domain('www.hogehoge.jp'), true);
+  assertIdentical(is::is_domain('www.hoge-hoge.jp'), true);
+  //
+  assertIdentical(is::is_domain('www.hogehoge.jp.'), false); // …微妙だけどねぇ
+  assertIdentical(is::is_domain('www..hogehoge.jp'), false);
+  assertIdentical(is::is_domain('www.hoge_hoge.jp'), false);
+  assertIdentical(is::is_domain('www.hoge&%$#"hoge.jp'), false);
+
+
+  // メアド
+  assertIdentical(is::is_email('hoge@geho.com'), true);
+  assertIdentical(is::is_email('hoge.@aa.jp'), true);
+  assertIdentical(is::is_email('hoge.+test@aa.jp'), true);
+  assertIdentical(is::is_email('hoge.-test@aa.jp'), true);
+  assertIdentical(is::is_email('"hoge@aaa+test"@aa.jp'), true);
+  assertIdentical(is::is_email('hoge@ge-ho.com'), true);
+  //
+  assertIdentical(is::is_email('hoge@1.2.3.4'), false);
+  assertIdentical(is::is_email('hoge@ho_ge.com'), false);
+  assertIdentical(is::is_email('hoge@ho_ge'), false);
+  assertIdentical(is::is_email('@hoge.com'), false);
+  assertIdentical(is::is_email('hoge@'), false);

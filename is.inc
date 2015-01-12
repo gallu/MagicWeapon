@@ -78,52 +78,35 @@ static public function is_digit($num){
 /**
  * emailアドレス判定
  *
- * XXX …微妙
+ * 
  *
  * @access public
  * @param string $s 判定する文字列
  * @return boolean emailとしてvalidな文字列ならtrue、invalidならfalse
  */
-  static public function is_email ($mail) {
-    if (!ereg ("[0-9a-zA-Z\.\-]@[0-9a-zA-Z\.\-]", $mail)) {
-      return false;
-    } else {
-      // ドメイン部分のチェック
-      $domain = ereg_replace ("[^@]*@", "", $mail);
-      if (ereg ("[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}", $domain)) {
-        // ドメイン部分がIPアドレスだった場合の処理
-        $ip = explode (".", $domain);
-        for ($i = 0; $i < 4; $i++) {
-          if (strlen($ip[$i]) == 0 || $ip[$i] > 255) {
-            $x = "error";
-            break;
-          }
-        }
-        if ($x) {
-          return false;
-        }
-      // IPでない場合のドメインチェック
-      }else if(is::is_domain($domain)){
-        // ドメイン部の文字数チェック
-        if(255 < strlen($domain)){
-          return false;
-        }
-      }else{
-        return false;
-      }
-      // ローカル部分のチェック
-      $local = substr($mail,0,strrpos($mail,"@".$domain));
-      // ローカル部の文字数チェック
-      if(64 < strlen($local)){
-        return false;
-      }
-      // スクリプト等を禁止するために＜＞は禁止！する！！
-      if(ereg("<|>",$local)){
-        return false;
-      }
-    }
-    return true;
+static public function is_email ($s) {
+  // メアドの分解
+  $awk = explode('@', $s);
+  $domain_part = array_pop($awk);
+  $local_part = implode('@', $awk);
+  //
+//var_dump($local_part);
+//var_dump($domain_part);
+
+  // ドメイン部分チェック
+  $r = self::is_domain($domain_part); // XXX 本当はstatic::がよいんだが、バージョン低い所あるだろうし…弊害とりあえずないし…
+  if (false === $r) {
+    return false;
   }
+
+  // local-partは雑に判定：文字があればいいよね？
+  if (0 === strlen($local_part)) {
+    return false;
+  }
+
+  // else
+  return true;
+}
 
 /**
  * ドメイン判定
@@ -132,17 +115,7 @@ static public function is_digit($num){
  * @param string $s 判定する文字列
  * @return boolean ドメインとしてvalidな文字列ならtrue、invalidならfalse
  */
-  static public function is_domain($domain){
-    //$chars = "((([a-zA-Z0-9])|([a-zA-Z0-9])(([a-zA-Z0-9])|-)*([a-zA-Z0-9])))*(([a-zA-Z])|([a-zA-Z])(([a-zA-Z0-9])|-)*([a-zA-Z0-9]))+\.?";
-    $chars = "(^[0-9a-zA-Z]+[0-9a-zA-Z\-]*[0-9a-zA-Z]{1}\.{0,1})*[0-9a-zA-Z]{1}$";
-    if(!ereg($chars, $domain)){
-      return false;
-    }
-    return true;
-/*
-
-
-function is_domain($s) {
+static public function is_domain($s){
   // 文字長取得
   $len = strlen($s);
 
@@ -186,9 +159,6 @@ function is_domain($s) {
   return true;
 }
 
-*/
-
-  }
 
 /**
  * URI判定
