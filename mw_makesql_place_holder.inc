@@ -46,13 +46,18 @@ public function make_select($table_name, array $cols, array $where, array $where
 
   // カラム名文字列の作成
   // XXX ここはチェックしねぇけどいいだろ別に外部入力ひっぱってこねぇし
+  $awk = array();
+  foreach($cols as $s) {
+    $awk[] = "`{$s}`";
+  }
+  $cols = $awk;
   $col = implode(",", $cols);
 
   // WHERE部分の作成
   $sql_obj = $this->make_where($where, $where_data_type);
 
   // SQL準備文の合成
-  $sql = "SELECT " . $col . " FROM " . $table_name . " WHERE " . $sql_obj->get_sql();
+  $sql = "SELECT " . $col . " FROM `" . $table_name . "` WHERE " . $sql_obj->get_sql();
   if (true === $tran_flg) {
     // トランザクション用ロックの付与
     // XXX 外から「問答無用でoffる」オプションとかいるかなぁ？ 必要になったら考えよう
@@ -88,7 +93,7 @@ public function make_insert($table_name, array $value, array $data_type)
 
   foreach ($value as $key => $val) {
     // カラム名
-    $vname[] = $key;
+    $vname[] = "`{$key}`";
 
     // バインドする場所の名前
     $s = ":{$key}";
@@ -99,7 +104,7 @@ public function make_insert($table_name, array $value, array $data_type)
   }
 
   //
-  $sql =  "INSERT INTO " . $table_name . " (" . implode($vname, ",") . ") VALUES (" . implode($place_holder, ",") . ");";
+  $sql =  "INSERT INTO `" . $table_name . "` (" . implode($vname, ",") . ") VALUES (" . implode($place_holder, ",") . ");";
   $sql_obj->set_sql($sql);
 
   //
@@ -133,14 +138,14 @@ public function make_update($table_name, array $value, array $where, array $data
     $s = ":{$key}";
 
     // SQL用素材
-    $awk[] = "{$key} = {$s}";
+    $awk[] = "`{$key}` = {$s}";
 
     // 値のbind
     $sql_obj->bind($key, $val, $data_type[$key]);
   }
 
   // sql準備文の組み立て
-  $sql = "UPDATE {$table_name} SET " . implode($awk, ",");
+  $sql = "UPDATE `{$table_name}` SET " . implode($awk, ",");
   // WHERE句の付与
   if ('' !== $sql_obj->get_sql()) {
     $sql .= " WHERE " . $sql_obj->get_sql();
@@ -187,7 +192,7 @@ public function make_update_calculation($table_name, $col, $sign, $num, array $w
 
   // SQLの作成
   $s = ":{$col}_calculation"; // XXX プレースホルダ名は重複を避けるためにsuffix付けて
-  $sql = "UPDATE {$table_name} SET {$col} = {$col} {$sign} {$s}";
+  $sql = "UPDATE `{$table_name}` SET `{$col}` = `{$col}` {$sign} {$s}";
   // bindは数値固定
   $sql_obj->bind($s, $num, data_clump::DATATYPE_INT);
   // WHERE句の付与
@@ -217,7 +222,7 @@ public function make_delete($table_name, array $where, array $where_data_type)
   // 先にWHERE部分の作成
   $sql_obj = $this->make_where($where, $where_data_type);
   //
-  $sql = "DELETE FROM {$table_name}";
+  $sql = "DELETE FROM `{$table_name}`";
   // WHERE句の付与
   if ('' !== $sql_obj->get_sql()) {
     $sql .= " WHERE " . $sql_obj->get_sql();
@@ -251,7 +256,7 @@ public function make_where(array $where, array $where_data_type)
     $s = ":{$key}";
 
     // 準備文用文字列の作成
-    $w[] =  "{$key} = {$s}";
+    $w[] =  "`{$key}` = {$s}";
     // 値のバインド
     $sql_obj->bind($s, $val, $where_data_type[$key]);
   }

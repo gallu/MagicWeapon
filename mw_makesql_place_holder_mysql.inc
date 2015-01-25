@@ -76,7 +76,7 @@ public function make_upsert($table_name, array $value, array $data_type)
 
   foreach ($value as $key => $val) {
     // カラム名
-    $vname[] = $key;
+    $vname[] = "`$key`";
 
     // バインドする場所の名前
     $s = ":{$key}";
@@ -87,7 +87,7 @@ public function make_upsert($table_name, array $value, array $data_type)
   }
 
   //
-  $sql =  "REPLACE INTO " . $table_name . " (" . implode($vname, ",") . ") VALUES (" . implode($place_holder, ",") . ");";
+  $sql =  "REPLACE INTO `" . $table_name . "` (" . implode($vname, ",") . ") VALUES (" . implode($place_holder, ",") . ");";
   $sql_obj->set_sql($sql);
 
   //
