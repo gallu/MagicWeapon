@@ -342,6 +342,18 @@ public function escape($s)
   return $this->conn_->quote($s);
 }
 
+/**
+ * auto increment時の、inseerした時のIDの取得
+ *
+ * XXX psqlだと「シーケンス名」が必要なので、後で修正
+ *
+ * @access public
+ * @return int insertで自動的に割り当てられたIDの値
+ */
+public function get_inserted_id() {
+  return $this->conn_->lastInsertId();
+}
+
 
 //private:
 private $conn_ = null;

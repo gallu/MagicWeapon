@@ -37,6 +37,7 @@ abstract public function connect();
 abstract public function disconnect();
 abstract public function query_direct($sql);
 abstract public function query_prepared($sql);
+abstract public function get_inserted_id();
 
 /**
  * クエリの発行

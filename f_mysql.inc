@@ -217,6 +217,17 @@ public function escape($s)
   return mysql_real_escape_string($s, $this->conn_);
 }
 
+/**
+ * auto increment時の、inseerした時のIDの取得
+ *
+ * @access public
+ * @return int insertで自動的に割り当てられたIDの値
+ */
+public function get_inserted_id() {
+  return mysql_insert_id($this->conn_);
+}
+
+
 
 //private:
 private $conn_ = null;
