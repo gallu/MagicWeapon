@@ -97,7 +97,7 @@ $type_guess = array (
   }
 
   // 指定データベースのテーブル一覧を取得
-  $sql = 'SHOW TABLE STATUS FROM ' . $dbh->get_database_name() . ';'; // XXX
+  $sql = 'SHOW TABLE STATUS FROM `' . $dbh->get_database_name() . '` ;'; // XXX
   $res = $dbh->query($sql);
   $res->set_fetch_type_hash(); // hash名で欲しいので
 
@@ -108,7 +108,7 @@ $type_guess = array (
 //var_dump($res->get_data('Comment'));
 
     // １テーブルの情報を取得
-    $sql = 'SHOW FULL COLUMNS FROM ' . $res->get_data('Name') . ';'; // XXX
+    $sql = 'SHOW FULL COLUMNS FROM `' . $res->get_data('Name') . '` ;'; // XXX
     $res2 = $dbh->query($sql);
     $res2->set_fetch_type_hash(); // hash名で欲しいので
 
