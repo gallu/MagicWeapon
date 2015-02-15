@@ -31,6 +31,22 @@ public function get()
   return $token;
 }
 
+/**
+ * 推測困難IDの取得(base64で文字長を短くした版)
+ *
+ * XXX あちこち固定。可変にしたいタイミングで適当に後で切り出す
+ *
+ * @access public
+ * @return 戻り値の型 簡単な説明
+ */
+public function get_base64()
+{
+  $token = base64_encode(hash('sha512', file_get_contents('/dev/urandom', false, NULL, 0, 128), true));
+  $token = substr($token, 0, 86);
+
+  //
+  return $token;
+}
 
 //private:
 } // end of class
