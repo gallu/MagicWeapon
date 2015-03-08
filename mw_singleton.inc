@@ -22,6 +22,15 @@ protected function __construct() {
 }
 
 /**
+ * clone禁止
+ */
+private function __clone() {
+  // 例え「private」からアクセス可能であろうとも、弾く!!
+  throw new RuntimeException("You can't clone this instance.");
+}
+
+
+/**
  * インスタンス取得口
  *
  * @access public
