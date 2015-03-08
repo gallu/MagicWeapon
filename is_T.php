@@ -48,6 +48,8 @@ function assertIdentical($b1, $b2) {
   assertIdentical(is::is_email('hoge.-test@aa.jp'), true);
   assertIdentical(is::is_email('"hoge@aaa+test"@aa.jp'), true);
   assertIdentical(is::is_email('hoge@ge-ho.com'), true);
+  assertIdentical(is::is_email('"><script>alert(\'or/**/1=1#\')</script>"@example.jp'), true);
+  assertIdentical(is::is_email('"><script>alert(\'or 1=1#\')</script>"@example.jp'), true);
   //
   assertIdentical(is::is_email('hoge@1.2.3.4'), false);
   assertIdentical(is::is_email('hoge@ho_ge.com'), false);
