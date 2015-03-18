@@ -14,20 +14,20 @@
 
 class code_util {
 
-	/**
-	 * 都道府県取得
-	 *
-	 * @access public
-	 * @param int $i 都道府県コード
-	 * @return string コードにあった値 問題があれば空文字
-	 */
-	static public function prefecture($i)
-	{
-		if (1 > $i) { return ""; }
-		if (47 < $i) { return ""; }
+/**
+ * 都道府県取得
+ *
+ * @access public
+ * @param int $i 都道府県コード
+ * @return string コードにあった値 問題があれば空文字
+ */
+static public function prefecture($i)
+{
+  if (1 > $i) { return ""; }
+  if (47 < $i) { return ""; }
 
-		//
-		$area_val = array(
+  //
+  $area_val = array(
     '1' => '北海道',
     '2' => '青森県',
     '3' => '岩手県',
@@ -75,106 +75,174 @@ class code_util {
     '45' => '宮崎県',
     '46' => '鹿児島県',
     '47' => '沖縄県' );
-		//
-		return $area_val[$i];
-	}
+  //
+  return $area_val[$i];
+}
 
-	/**
-	 * 62進数変換
-	 *
-	 * @access public
-	 * @param int $dec 変換前の数値:10進数前提
-	 * @return string 数値を62進数に変換
-	 */
-	static public function to62($dec)
-	{
-		//
-		static $ar = array("0","1","2","3","4","5","6","7","8","9",
-              "a", "b","c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-              "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
-              "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-              "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-              );
+/**
+ * 都道府県コード取得
+ *
+ * @access public
+ * @param string $s 都道府県名
+ * @return int $i 都道府県コード 問題があったら0
+ */
+static public function prefecture_code($s)
+{
+  //
+  $area_val = array (
+    '北海道' => 1,
+    '青森県' => 2,
+    '岩手県' => 3,
+    '宮城県' => 4,
+    '秋田県' => 5,
+    '山形県' => 6,
+    '福島県' => 7,
+    '茨城県' => 8,
+    '栃木県' => 9,
+    '群馬県' => 10,
+    '埼玉県' => 11,
+    '千葉県' => 12,
+    '東京都' => 13,
+    '神奈川県' => 14,
+    '新潟県' => 15,
+    '富山県' => 16,
+    '石川県' => 17,
+    '福井県' => 18,
+    '山梨県' => 19,
+    '長野県' => 20,
+    '岐阜県' => 21,
+    '静岡県' => 22,
+    '愛知県' => 23,
+    '三重県' => 24,
+    '滋賀県' => 25,
+    '京都府' => 26,
+    '大阪府' => 27,
+    '兵庫県' => 28,
+    '奈良県' => 29,
+    '和歌山県' => 30,
+    '鳥取県' => 31,
+    '島根県' => 32,
+    '岡山県' => 33,
+    '広島県' => 34,
+    '山口県' => 35,
+    '徳島県' => 36,
+    '香川県' => 37,
+    '愛媛県' => 38,
+    '高知県' => 39,
+    '福岡県' => 40,
+    '佐賀県' => 41,
+    '長崎県' => 42,
+    '熊本県' => 43,
+    '大分県' => 44,
+    '宮崎県' => 45,
+    '鹿児島県' => 46,
+    '沖縄県' => 47,
+  );
+  //
+  if (false === isset($area_val[$s])) {
+    return 0;
+  }
+  // eles
+  return $area_val[$s];
+}
 
-              //
-              $ret = "";
 
-              do {
-              	$bottom = $dec % 62;
-              	$ret = $ar[$bottom] . $ret;
-              	$dec = (int)($dec/62);
-              } while($dec);
+/**
+ * 62進数変換
+ *
+ * @access public
+ * @param int $dec 変換前の数値:10進数前提
+ * @return string 数値を62進数に変換
+ */
+static public function to62($dec)
+{
+  //
+  static $ar = array("0","1","2","3","4","5","6","7","8","9",
+      "a", "b","c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+      "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+      "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+      "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+      );
 
-              return $ret;
-	}
+  //
+  $ret = "";
 
-	/**
-	 * 62進数を10進数に変換
-	 *
-	 * @access public
-	 * @param int $dec 変換前の数値:10進数前提
-	 * @return string 数値を62進数に変換
-	 */
-	static public function from62to10($s)
-	{
-		// XXX 重複やだなぁ…どしよ？
-		static $ar = array("0","1","2","3","4","5","6","7","8","9",
-              "a", "b","c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-              "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
-              "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-              "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-              );
+  do {
+    $bottom = $dec % 62;
+    $ret = $ar[$bottom] . $ret;
+    $dec = (int)($dec/62);
+  } while($dec);
+
+  return $ret;
+}
+
+/**
+ * 62進数を10進数に変換
+ *
+ * @access public
+ * @param int $dec 変換前の数値:10進数前提
+ * @return string 数値を62進数に変換
+ */
+static public function from62to10($s)
+{
+  // XXX 重複やだなぁ…どしよ？
+  static $ar = array("0","1","2","3","4","5","6","7","8","9",
+      "a", "b","c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+      "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+      "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+      "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+      );
 
 
-              // 一旦反転…毎回だと重いかなぁ？ 反転データもっといたほうがよい？
-              $arr = array_flip($ar);
+  // 一旦反転…毎回だと重いかなぁ？ 反転データもっといたほうがよい？
+  $arr = array_flip($ar);
 
-              //
-              $ret = 0;
+  //
+  $ret = 0;
 
-              // 先頭から一文字づつ精査
-              for($i = 0; $i < strlen($s); $i ++) {
-                $ret *= 62; // まず桁をずらして
-                $ret += $arr[$s[$i]]; // 現在の桁の数値を足しこむ
-              }
+  // 先頭から一文字づつ精査
+  for($i = 0; $i < strlen($s); $i ++) {
+    $ret *= 62; // まず桁をずらして
+    $ret += $arr[$s[$i]]; // 現在の桁の数値を足しこむ
+  }
 
-              //
-              return $ret;
-	}
+  //
+  return $ret;
+}
 
-	/**
-	 * 金額用フォーマット
-	 *
-	 * ３桁ごとに金額に，(正確にはdelimiterの値)をぶち込む
-	 * XXX 負の値とかまだテストしてない〜
-	 *
-	 * @access public
-	 * @param int $i 金額
-	 * @param string $delimiter デリミタ
-	 * @return string デリミタで区切られた文字列
-	 */
-	static public function money_format($i, $delimiter = ',')
-	{
-		$awk = array();
-		while(0 !== $i) {
-			array_unshift($awk,  sprintf("%03d", $i % 1000));
-			$i = (int)floor($i / 1000);
-		}
+/**
+ * 金額用フォーマット
+ *
+ * ３桁ごとに金額に，(正確にはdelimiterの値)をぶち込む
+ * XXX 負の値とかまだテストしてない〜
+ *
+ * @access public
+ * @param int $i 金額
+ * @param string $delimiter デリミタ
+ * @return string デリミタで区切られた文字列
+ */
+static public function money_format($i, $delimiter = ',')
+{
+  $awk = array();
+  while(0 !== $i) {
+    array_unshift($awk,  sprintf("%03d", $i % 1000));
+    $i = (int)floor($i / 1000);
+  }
 
-		// XXX 先頭要素だけ０paddingを取り除く
-		$awk[0] = (string)$awk[0] + 0;
+  // XXX 先頭要素だけ０paddingを取り除く
+  $awk[0] = (string)$awk[0] + 0;
 
-		if (false === empty($awk)) {
-			$ret = implode($delimiter, $awk);
-		} else {
-			$ret = '0';
-		}
+  if (false === empty($awk)) {
+    $ret = implode($delimiter, $awk);
+  } else {
+    $ret = '0';
+  }
 
-		//
-		return $ret;
-	}
+  //
+  return $ret;
+}
 
-	//private:
+//private:
 
 
 } // end of class
