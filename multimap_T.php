@@ -28,6 +28,9 @@ $obj = new multimap;
 //var_dump($values);
 
   // 単値
-  $s = $obj->find('test', 'test-value');
+  $s = $obj->find('test');
+var_dump($s);
+  $s = $obj->find('test-name1');
+var_dump($s);
 
 
