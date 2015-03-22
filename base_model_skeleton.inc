@@ -163,6 +163,11 @@ public function is_bag($name) {
   return true;
 }
 
+// 再帰の深さ(０ start)
+public function get_recursive_depth() {
+  return $this->get_bag('recursive_counter');
+}
+
 //
 // abstract
 public function initialize() { return true; }

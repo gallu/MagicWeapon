@@ -366,6 +366,8 @@ public function run_main($cstring, $recursive_counter)
   $model_ins->set_my_name($cstring);
   $model_ins->set_bag_obj($this->get_bag_obj());
   $model_ins->set_mobile($this->get_mobile_obj());
+  //
+  $model_ins->set_bag('recursive_counter', $recursive_counter);
 
 //print "\nbag \n";
 //var_dump($this->get_bag_obj());
