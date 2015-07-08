@@ -1538,6 +1538,24 @@ protected function _get_property_list() {
   return $p;
 }
 
+/**
+ * auto incrementの時に、pkにIDを入れる
+ *
+ * @access public
+ */
+public function set_insert_id() {
+  // pkカラム名を取得
+  // XXX 複数カラムは未考慮
+  $keys = $this->get_all_key_names();
+
+  // IDを把握
+  // XXX memcachedとかは未考慮
+  $id = $this->get_db()->get_inserted_id();
+
+  // 設定
+  $this->set_value($keys[0], $id);
+}
+
 
 //private:
 private $dbh_;          // DBハンドル
