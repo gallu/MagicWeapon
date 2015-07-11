@@ -912,9 +912,9 @@ public function set_from_cgi_detail($req, array $target, $empty_overwrite_flg = 
   foreach($target as $name) {
     // 情報の(とりあえずの)格納
     $wk = $req->find($this->get_cgi_name($name));
-    // 上書きフラグが false で
+    // 上書きフラグが false で、値もなくkeyもない場合
     if (false === $empty_overwrite_flg) {
-      if ("" === $wk) {
+      if (("" === $wk)&&(false === $req->is_exist($this->get_cgi_name($name)))) {
         continue;
       }
     }
