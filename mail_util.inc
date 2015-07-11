@@ -81,11 +81,9 @@ static public function make_mailobj_from_template_with_model($model, $filename)
   // 呼び出す
   $fn = $model->get_config()->find('template_dir') . '/' . $filename;
 //var_dump($fn);
-  $template_encode = $model->get_config()->find('template_encoding_type');
-//var_dump($template_encode);
 
   //
-  return self::make_mailobj_from_template($fn, $template_encode);
+  return self::make_mailobj_from_template($fn);
 }
 
 
@@ -96,34 +94,16 @@ static public function make_mailobj_from_template_with_model($model, $filename)
  *
  * @access public
  * @param string $filename テンプレートファイル名
- * @param string $file_encode ファイルのエンコード
  * @return object internet_message_formatインスタンス
  */
-static public function make_mailobj_from_template($filename, $file_encode = '')
+static public function make_mailobj_from_template($filename)
 {
 //var_dump($filename);
-  // 文字コードの確定
-  $eobj = new multibyte;
-  // fromは引数次第
-  if ('' === $file_encode) {
-    // デフォルトは、まだ当分 sjis かねぇ？
-    $eobj->set_from_encoding_sjis();
-  } else {
-    // 仰せのままに パパラパ〜
-    $eobj->set_guess_from_string($file_encode);
-  }
-  // toは内部エンコードにする
-  $eobj->set_guess_to_string(mw_area_setting::get_inside_encoding_type());
-
   // ファイル見つけて
   $s = file_get_contents($filename);
   if (true === empty($s)) {
     return null;
   }
-
-  // 文字コードを変換しておく
-  $s = $eobj->convert($s);
-//var_dump($s);
 
   // 実処理はむこうさんにお願い〜
   $mobj = new internet_message_format;
