@@ -311,9 +311,9 @@ public function make_tmp_key() { $this->set_tmp_key(tokenizer::get()); }
  * set_all_to_convで、特殊置換をする設定
  *
  * @access public
- * @return db_handle db_handleクラス(からの派生クラス)のインスタンス
  */
-public function set_selected_item($a) { $this->dic_selected_ = $a; }
+public function push_selected_item($s) { $this->dic_selected_[] = $s; }
+public function set_selected_item(array $a) { $this->dic_selected_ = $a; } // 非推奨
 public function get_selected_item() { return $this->dic_selected_; }
 
 /**
@@ -322,9 +322,9 @@ public function get_selected_item() { return $this->dic_selected_; }
  * set_all_to_convで、特殊置換をする設定
  *
  * @access public
- * @return db_handle db_handleクラス(からの派生クラス)のインスタンス
  */
-public function set_checked_item($a) { $this->dic_checed_ = $a; }
+public function push_checked_item($s) { $this->dic_checed_[] = $s; }
+public function set_checked_item(array $a) { $this->dic_checed_ = $a; } // 非推奨
 public function get_checked_item() { return $this->dic_checed_; }
 
 
