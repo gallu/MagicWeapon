@@ -44,6 +44,9 @@ $$$/recodes$$$
   //$this->set_insert_date_name('create_date');
   //$this->set_update_date_name('update_date');
 
+  // set_all_to_conv用(secure_conv使用時)
+  //$this->push_selected_item('');
+  //$this->push_checked_item('');
 }
 
 

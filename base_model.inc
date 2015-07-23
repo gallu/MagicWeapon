@@ -43,6 +43,26 @@ public function init()
 }
 
 /**
+ * 共通的な初期処理
+ *
+ * 実際には「レイアウト用」の初期処理。レイアウトは使ったり使わなかったりするだろうけど、重い処理ではないので共通にしておく
+ *
+ *
+ * @access public
+ */
+public function initialize() {
+  // 親呼んで
+  $r = parent::initialize();
+  // デフォルトのレイアウトだけ設定しておく
+  if (false === $this->is_bag('layout')) {
+    $this->set_layout_filename('layout.tpl');
+  }
+
+  //
+  return $r;
+}
+
+/**
  * 共通的な終了処理
  *
  * テンプレートに、configから取得した「uri、ssl_uri、mx_domain」を設定
@@ -288,8 +308,27 @@ public function get_from_cgi_array($k) {
   return $s;
 }
 
+/**
+ * レイアウトファイル名の取得(view系のクラスで使う事を想定)
+ *
+ * @access public
+ * @return string レイアウトファイル名。レイアウト未適用の場合は空文字
+ */
+public function get_layout_filename() {
+  if (false === $this->is_bag('layout')) {
+    return '';
+  }
+  // else
+  return $this->get_bag('layout');
+}
 
-
+/**
+ * レイアウトファイル名の設定
+ *
+ * @access protected
+ * @param string $v レイアウトファイル名。レイアウト未適用の場合は空文字
+ */
+protected function set_layout_filename($v) { $this->set_bag('layout', $v); }
 
 //private:
 } // end of class

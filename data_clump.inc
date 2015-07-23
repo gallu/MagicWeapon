@@ -311,9 +311,9 @@ public function make_tmp_key() { $this->set_tmp_key(tokenizer::get()); }
  * set_all_to_convで、特殊置換をする設定
  *
  * @access public
- * @return db_handle db_handleクラス(からの派生クラス)のインスタンス
  */
-public function set_selected_item($a) { $this->dic_selected_ = $a; }
+public function push_selected_item($s) { $this->dic_selected_[] = $s; }
+public function set_selected_item(array $a) { $this->dic_selected_ = $a; } // 非推奨
 public function get_selected_item() { return $this->dic_selected_; }
 
 /**
@@ -322,9 +322,9 @@ public function get_selected_item() { return $this->dic_selected_; }
  * set_all_to_convで、特殊置換をする設定
  *
  * @access public
- * @return db_handle db_handleクラス(からの派生クラス)のインスタンス
  */
-public function set_checked_item($a) { $this->dic_checed_ = $a; }
+public function push_checked_item($s) { $this->dic_checed_[] = $s; }
+public function set_checked_item(array $a) { $this->dic_checed_ = $a; } // 非推奨
 public function get_checked_item() { return $this->dic_checed_; }
 
 
@@ -912,9 +912,9 @@ public function set_from_cgi_detail($req, array $target, $empty_overwrite_flg = 
   foreach($target as $name) {
     // 情報の(とりあえずの)格納
     $wk = $req->find($this->get_cgi_name($name));
-    // 上書きフラグが false で
+    // 上書きフラグが false で、値もなくkeyもない場合
     if (false === $empty_overwrite_flg) {
-      if ("" === $wk) {
+      if (("" === $wk)&&(false === $req->is_exist($this->get_cgi_name($name)))) {
         continue;
       }
     }
@@ -1536,6 +1536,24 @@ protected function _get_property_list() {
   $p = parent::_get_property_list();
   $p = array_merge($p, array_keys(get_object_vars($this)));
   return $p;
+}
+
+/**
+ * auto incrementの時に、pkにIDを入れる
+ *
+ * @access public
+ */
+public function set_insert_id() {
+  // pkカラム名を取得
+  // XXX 複数カラムは未考慮
+  $keys = $this->get_all_key_names();
+
+  // IDを把握
+  // XXX memcachedとかは未考慮
+  $id = $this->get_db()->get_inserted_id();
+
+  // 設定
+  $this->set_value($keys[0], $id);
 }
 
 
