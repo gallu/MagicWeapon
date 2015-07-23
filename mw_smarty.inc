@@ -38,6 +38,14 @@ public function set($tpl_var, $value = null)
   parent::assign($this->_esc($tpl_var), $this->_esc($value));
 }
 
+//
+public function assign($tpl_var, $value = null)
+{
+  //
+  $this->set($tpl_var, $value);
+}
+
+
 /*
  * 内部処理用関数
  *
@@ -80,7 +88,7 @@ protected function _esc($str){
  */
 public function monoDic($n, $v)
 {
-  $this->assign($n, $v);
+  $this->set($n, $v);
 }
 
 /**
