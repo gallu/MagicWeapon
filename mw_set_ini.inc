@@ -15,17 +15,30 @@ ini_set('default_charset', '');
 // 内部文字コード指定
 setlocale(LC_ALL, 'ja_JP.UTF-8');
 ini_set('mbstring.language', 'Japanese');
-ini_set('mbstring.internal_encoding', 'UTF-8');
+if (version_compare(PHP_VERSION, '5.6.0') < 0) {
+  ini_set('mbstring.internal_encoding', 'UTF-8'); /// 5.6.0から非推奨
+} else {
+  ini_set('internal_encoding', 'UTF-8'); // 5.6.0以降はこっち
+}
 
 // 文字コードの自動判定用
 // XXX sjisの可能性が高い場合は「sjis-win,eucjp-win,JIS,UTF-8,ASCII」のほうがよさげ
 mb_detect_order("UTF-8,sjis-win,eucjp-win,JIS,ASCII");
 
-// request文字の自動変換とかしない
-ini_set('mbstring.http_input', 'pass');
+// XXX 5.6.0から非推奨
+if (version_compare(PHP_VERSION, '5.6.0') < 0) {
+  // request文字の自動変換とかしない
+  ini_set('mbstring.http_input', 'pass');
 
-// response文字の自動変換とかしない
-ini_set('mbstring.http_output', 'pass');
+  // response文字の自動変換とかしない
+  ini_set('mbstring.http_output', 'pass');
+} else {
+  // request文字の自動変換とかしない
+  ini_set('input_encoding', '');
+
+  // response文字の自動変換とかしない
+  ini_set('output_encoding', '');
+}
 
 // 厳密なエンコーディング検出を行いません
 ini_set('mbstring.strict_detection', '0');
