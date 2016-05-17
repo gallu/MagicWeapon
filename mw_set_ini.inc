@@ -9,8 +9,8 @@
  * @author  Michiaki Wuzawa <wuzawa@m-fr.net>
  **/
 
-// charsetの送信 を無効にする
-ini_set('default_charset', '');
+// charsetの送信 をUTF-8にしておく
+ini_set('default_charset', 'UTF-8');
 
 // 内部文字コード指定
 setlocale(LC_ALL, 'ja_JP.UTF-8');
