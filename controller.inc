@@ -17,7 +17,6 @@ require_once('cgi_response.inc');
 require_once('load_manager.inc');
 require_once('security.inc');
 require_once('multimap.inc');
-require_once('guess_from_data_encoding.inc');
 require_once('mw_config.inc');
 require_once('mobile_info.inc');
 require_once('user_agent_check.inc');
