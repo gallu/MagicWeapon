@@ -140,6 +140,16 @@ public function make_instancees()
       $e = 'ISO-2022-JP';
       break;
 
+    case 'auto':
+      if (true === $this->get_mobile_obj()->is_mobile()) {
+        $e = 'Shift_JIS';
+        $output_encoding_type = 'sjis-win';
+      } else {
+        $e = 'utf-8';
+        $output_encoding_type = 'utf-8';
+      }
+      break;
+
     default:
       throw new ErrorException('encode type invalid!!');
       break;
