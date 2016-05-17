@@ -20,6 +20,7 @@ if (version_compare(PHP_VERSION, '5.6.0') < 0) {
 } else {
   ini_set('internal_encoding', 'UTF-8'); // 5.6.0以降はこっち
 }
+mb_internal_encoding('UTF-8');
 
 // 文字コードの自動判定用
 // XXX sjisの可能性が高い場合は「sjis-win,eucjp-win,JIS,UTF-8,ASCII」のほうがよさげ
