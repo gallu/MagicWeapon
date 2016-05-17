@@ -49,17 +49,18 @@ class data_clump extends basis_clump
 {
 //public:
 // validation用
-const V_MUST     =    1; // 必須
-const V_STRING   =    2; // 文字列
-const V_NUMERIC  =    4; // 数値(パラメタは値を示す
-const V_DIGIT    =    8; // 数字(パラメタは桁数を示す
-const V_ALPHA    =   16; // 英字
-const V_ALPNUM   =   32; // 英数字
-const V_POST     =   64; // 郵便番号(nnn-nnnn、nnnnnnn、nnn nnnnの３パターンフォロー
-const V_EMAIL1   =  128; // メアド
-const V_DATE     =  256; // 日付
-const V_M_STRING =  512; // 全角交じりの文字列(サイズのチェックを 全角:2文字 半角:1文字として扱う
-const V_KATAKANA_UTF8 = 1024; // UTF-8文字コードのカタカナ(文字長の規定はしてないんで、基本、V_M_STRINGと一緒がいいと思う)
+const V_MUST      =    1; // 必須
+const V_STRING    =    2; // 文字列
+const V_NUMERIC   =    4; // 数値(パラメタは値を示す
+const V_DIGIT     =    8; // 数字(パラメタは桁数を示す
+const V_ALPHA     =   16; // 英字
+const V_ALPNUM    =   32; // 英数字
+const V_POST      =   64; // 郵便番号(nnn-nnnn、nnnnnnn、nnn nnnnの３パターンフォロー
+const V_EMAIL1    =  128; // メアド
+const V_DATE      =  256; // 日付
+const V_M_STRING  =  512; // 全角交じりの文字列(サイズのチェックを 全角:2文字 半角:1文字として扱う(mb_strwidth使用)
+const V_M_STRING2 = 1024; // 全角交じりの文字列(サイズのチェックを 全角半角ともすべて１文字として扱う(mb_strlen使用)
+const V_KATAKANA_UTF8 = 2048; // UTF-8文字コードのカタカナ(文字長の規定はしてないんで、基本、V_M_STRINGと一緒がいいと思う)
 
 // DB用変数の型
 // XXX 論理和とかあり得ないから連番で
@@ -589,17 +590,18 @@ public function is_valid_update($conv = null)
  * validate要素の決定
  *
  * 現状サポートしているのは以下の通り
-const V_MUST     =    1; // 必須
-const V_STRING   =    2; // 文字列
-const V_NUMERIC  =    4; // 数値(パラメタは値を示す
-const V_DIGIT    =    8; // 数字(パラメタは桁数を示す
-const V_ALPHA    =   16; // 英字
-const V_ALPNUM   =   32; // 英数字
-const V_POST     =   64; // 郵便番号(nnn-nnnn、nnnnnnn、nnn nnnnの３パターンフォロー
-const V_EMAIL1   =  128; // メアド
-const V_DATE     =  256; // 日付
-const V_M_STRING =  512; // 全角交じりの文字列(サイズのチェックを 全角:2文字 半角:1文字として扱う
-const V_KATAKANA_UTF8 = 1024; // UTF-8文字コードのカタカナ(文字長の規定はしてないんで、基本、V_M_STRINGと一緒がいいと思う)
+const V_MUST      =    1; // 必須
+const V_STRING    =    2; // 文字列
+const V_NUMERIC   =    4; // 数値(パラメタは値を示す
+const V_DIGIT     =    8; // 数字(パラメタは桁数を示す
+const V_ALPHA     =   16; // 英字
+const V_ALPNUM    =   32; // 英数字
+const V_POST      =   64; // 郵便番号(nnn-nnnn、nnnnnnn、nnn nnnnの３パターンフォロー
+const V_EMAIL1    =  128; // メアド
+const V_DATE      =  256; // 日付
+const V_M_STRING  =  512; // 全角交じりの文字列(サイズのチェックを 全角:2文字 半角:1文字として扱う(mb_strwidth使用)
+const V_M_STRING2 = 1024; // 全角交じりの文字列(サイズのチェックを 全角半角ともすべて１文字として扱う(mb_strlen使用)
+const V_KATAKANA_UTF8 = 2048; // UTF-8文字コードのカタカナ(文字長の規定はしてないんで、基本、V_M_STRINGと一緒がいいと思う)
 
  *
  *
@@ -725,6 +727,10 @@ public function _is_valid(array $targets, $conv = null)
       if (self::V_M_STRING & $type) {
         $code = mw_area_setting::get_inside_encoding_type();
         $len = mb_strwidth($value, $code);
+      } else
+      if (self::V_M_STRING2 & $type) {
+        $code = mw_area_setting::get_inside_encoding_type();
+        $len = mb_strlen($value, $code);
       } else {
         $len = strlen($value);
       }
@@ -762,7 +768,7 @@ public function _is_valid(array $targets, $conv = null)
       }
     }
 
-    // 文字列：事実上「未チェック」なので書かない
+    // 文字列(V_STRING)：事実上「未チェック」なので書かない
 
     // 数値 and 数字
     if ((self::V_NUMERIC & $type) || (self::V_DIGIT & $type) ) {
