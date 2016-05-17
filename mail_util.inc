@@ -13,7 +13,6 @@
  * @access  public
  * @author  Michiaki Wuzawa <wuzawa@m-fr.net>
  **/
-require_once('mw_area_setting.inc');
 require_once('internet_message_format.inc');
 
 class mail_util {

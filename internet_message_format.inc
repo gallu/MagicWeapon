@@ -18,7 +18,6 @@
 require_once('internet_message_format_header_fields.inc');
 require_once('internet_message_format_body_text.inc');
 require_once('multibyte.inc');
-require_once('mw_area_setting.inc');
 
 class internet_message_format extends internet_message_format_header_fields {
 
@@ -104,7 +103,7 @@ $ret = "";
   // XXX いったんiso-2022jp固定
   $m = new multibyte;
   $m->set_jis();
-  $s = mw_area_setting::get_inside_encoding_type();
+  $s = mb_internal_encoding();
   if ('' === $s) {
     $m->set_from_encoding_euc();
   } else {

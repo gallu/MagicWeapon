@@ -725,11 +725,11 @@ public function _is_valid(array $targets, $conv = null)
         $len = $value;
       } else
       if (self::V_M_STRING & $type) {
-        $code = mw_area_setting::get_inside_encoding_type();
+        $code = mb_internal_encoding();
         $len = mb_strwidth($value, $code);
       } else
       if (self::V_M_STRING2 & $type) {
-        $code = mw_area_setting::get_inside_encoding_type();
+        $code = mb_internal_encoding();
         $len = mb_strlen($value, $code);
       } else {
         $len = strlen($value);

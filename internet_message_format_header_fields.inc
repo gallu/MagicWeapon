@@ -13,7 +13,6 @@
  * @version $Revision$
  **/
 
-require_once('mw_area_setting.inc');
 require_once('security.inc');
 require_once('multimap.inc');
 require_once('multibyte.inc');
@@ -131,7 +130,7 @@ protected function _b_encoding($base)
   // 一応内部コードを重視、無指定ならEUC…なのは伝統だと思いねぇ
   $m = new multibyte;
   $m->set_jis();
-  $s = mw_area_setting::get_inside_encoding_type();
+  $s = mb_internal_encoding();
   if ('' === $s) {
     $m->set_from_encoding_euc();
   } else {
@@ -150,7 +149,7 @@ protected function _b_decoding($s)
   // XXX mb_encode_mimeheader不安なので未使用
   $mobj = new multibyte;
   $m->set_to_encoding_jis();
-  $s = mw_area_setting::get_inside_encoding_type();
+  $s = mb_internal_encoding();
   if ('' === $s) {
     $m->set_to_encoding_euc();
   } else {

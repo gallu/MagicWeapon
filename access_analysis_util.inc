@@ -9,7 +9,6 @@
  * @author  Michiaki Wuzawa <wuzawa@m-fr.net>
  **/
 
-require_once('mw_area_setting.inc');
 require_once('cgi_param.inc');
 
 class access_analysis_util {
@@ -19,7 +18,6 @@ class access_analysis_util {
  *
  * refererのuriから抜き出す
  * とりあえず一端雑に
- * mw_area_settingに設定があれば、文字コードを変更しておく
  *
  * @access publicかprivateかprotectedか
  * @param string $uri refererで取得できたURI

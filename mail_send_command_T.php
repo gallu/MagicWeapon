@@ -2,6 +2,7 @@
 
 require_once('internet_message_format.inc');
 require_once('mail_send_command.inc');
+require_once('mail_util.inc');
 
 $mobj = new internet_message_format;
 
