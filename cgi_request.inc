@@ -14,9 +14,7 @@
  * @version $Id$
  **/
 
-require_once('multibyte.inc');
-require_once('guess_from_data_encoding.inc');
-require_once('debug_util.inc');
+//require_once('debug_util.inc');
 
 //
 class cgi_request {
@@ -32,19 +30,14 @@ public function init()
 {
   // デフォルトをここにしておく
   $this->set_hi_priority_post();
-  // XXX cgi_request単体で使えるように一応設定
-  // XXX あとでエンコードタイプ変えられるようにする？
-  $ieobj = new multibyte;
-  $ieobj->set_euc();
-
-  // inの推測
-  $gobj = new guess_from_data_encoding;
-  // 推測
-  $gobj->guess();
-  // 推測値設定
-  $ieobj->set_guess_from_string($gobj->get_encoding_string());
+  // 文字コードが未指定なら、デフォルトUTF-8で設定しておく
+  if (false === defined('MW_INPUT_ENCODING')) {
+    define('MW_INPUT_ENCODING', 'UTF-8');
+  }
   //
-  $this->set_inside_encoding_obj($ieobj);
+  if ('' === mb_internal_encoding()) {
+    mb_internal_encoding('UTF-8');
+  }
 }
 
 /**
@@ -76,15 +69,6 @@ public function set_only_get() { $this->priority_ = "g"; }
  * @access    public
  */
 public function set_only_post() { $this->priority_ = "p"; }
-
-/**
- * 文字コード揃え用クラス設定
- * 
- */
-public function set_inside_encoding_obj($o)
-  { $this->inside_encoding_obj_ = $o; }
-protected function get_inside_encoding_obj()
-  { return $this->inside_encoding_obj_; }
 
 /**
  *
@@ -226,13 +210,13 @@ $ret = array();
 //print "befor buf $buf<br>";
 //debug_util::dump_string_put($buf);
 
-    // 絵文字処理用各種
+    // 絵文字処理用(一旦ダミーメソッド)
     $buf = $this->interruption_emoji($buf);
 //print "befor buf $buf<br>";
 //debug_util::dump_string_put($buf);
-    if (false === is_null($this->get_inside_encoding_obj())) {
-      $buf = $this->get_inside_encoding_obj()->convert($buf);
-    }
+    // 文字コード変換
+    $buf = mb_convert_encoding($buf, mb_internal_encoding(), MW_INPUT_ENCODING);
+
 //debug_util::dump_string_put($buf);
 //print "\n";
 //var_dump($buf);
@@ -394,7 +378,7 @@ public function get_file($name, $encode_flg = false)
 
   // もしencode必要ならする
   if (true === $encode_flg) {
-    $s = $this->get_inside_encoding_obj()->convert($s);
+    $s = mb_convert_encoding($s, mb_internal_encoding(), MW_INPUT_ENCODING);
   }
 
   //
@@ -417,7 +401,6 @@ public function interruption_emoji($s)
 
 //private:
 private $priority_;
-private $inside_encoding_obj_;  // 内部エンコード用 multibyteインスタンス
 
 } // end of class
 

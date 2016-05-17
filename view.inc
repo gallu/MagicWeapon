@@ -62,22 +62,7 @@ public function set_res_obj($o) { $this->res_obj_ = $o; }
  * @return object cgi_response系インスタンス
  */
 public function get_res_obj() { return $this->res_obj_; }
-
-/**
- * 文字コード変換系クラス(multibyte)のインスタンスの設定
- *
- * @access public
- * @param object $o multibyte系インスタンス
- */
-public function set_multi_obj($o) { $this->multi_obj_ = $o; }
-/**
- * 文字コード変換系クラス(multibyte)のインスタンスの取得
- *
- * @access public
- * @retrun object  multibyte系インスタンス
- */
-public function get_multi_obj() { return $this->multi_obj_; }
-
+//
 public function set_model_obj($o) { $this->model_obj_ = $o; }
 public function get_model_obj() { return $this->model_obj_; }
 
@@ -104,8 +89,6 @@ public function output()
   $this->put_contents_header();
 
   // body出力
-  // echoが早いとか言う話なので…まぁ一応
-  //print $out;
   echo $out;
 
   //
@@ -123,12 +106,11 @@ protected function get_contents_body()
 {
   //
   $res = $this->get_res_obj();
-  $mobj = $this->get_multi_obj();
 
   // bodyの出力
   if ($res->is_need_convert()) {
     // 文字系っぽいので置換して出力〜
-    return $mobj->convert( $this->get_body() );
+    return mb_convert_encoding($this->get_body(), MW_OUTPUT_ENCODING, mb_internal_encoding());
   }
   // else
   // 文字コード置換必要なさそうなのでそのまま〜
@@ -162,16 +144,9 @@ protected function get_body_from_convert()
 //print "get_body_from_convert \n";
   // 必要なインスタンスげと
   $mobj = $this->get_model_obj();
-  $incode = $mobj->get_inside_encoding_obj();
 
   // テンプレートの文字コードチェック
-  $s = $this->get_model_obj()->get_config()->find('template_encoding_type');
-  if ('' === $s) {
-    // XXX 微妙に怖いなぁここ…
-    $incode->set_from_encoding_unknown();
-  } else {
-    $incode->set_guess_from_string($s);
-  }
+  // XXX 一旦「内部エンコーディングに合わせる」前提でこの処理は一通り削除
 
   // テンプレートエンジンインスタンスげと
   // XXX 判定微妙だねぇ…
@@ -185,9 +160,7 @@ protected function get_body_from_convert()
     $out = $conv->fetch($fn);
   } else { // elseだとconv想定
     // テンプレートファイルを文字列として取得
-    $ts = file_get_contents($this->get_template_filename());
-    //
-    $out = $conv->conv($incode->convert($ts));
+    $out = $conv->conv(file_get_contents($this->get_template_filename()));
   }
 
   //

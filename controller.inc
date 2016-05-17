@@ -15,7 +15,6 @@
 require_once('cgi_request.inc');
 require_once('cgi_response.inc');
 require_once('load_manager.inc');
-require_once('multibyte.inc');
 require_once('security.inc');
 require_once('multimap.inc');
 require_once('guess_from_data_encoding.inc');
@@ -23,8 +22,8 @@ require_once('mw_config.inc');
 require_once('mobile_info.inc');
 require_once('user_agent_check.inc');
 require_once('config_extension.inc');
-require_once('mw_area_setting.inc');
 require_once('di.inc');
+require_once('mw_set_ini_encoding.inc');
 
 class controller {
 
@@ -46,11 +45,6 @@ public function get_bag_obj() { return $this->bag_; }
 //
 protected function set_mobile_obj($o) { $this->mobobj_ = $o; }
 public function get_mobile_obj() { return $this->mobobj_; }
-//
-protected function set_inside_encoding_obj($o)
-  { $this->inside_encoding_obj_ = $o; }
-public function get_inside_encoding_obj()
-  { return $this->inside_encoding_obj_; }
 
 //
 protected function set_output_encoding_obj($o)
@@ -88,7 +82,7 @@ public function init()
  * インスタンス生成
  *
  * request & response をはじめとしてさまざまなインスタンスを生成
- * bag、multibyte系など
+ * bag系など
  *
  * @access public
  * @return boolean 何かあったらfalse
@@ -97,48 +91,64 @@ public function make_instancees()
 {
   // 鞄インスタンス生成
   // XXX 準備いらないし直で
-  $this->set_bag_obj( new multimap );
+  $this->set_bag_obj( new multimap() );
 
-  // 内部エンコード用クラス作成
-  // inは任意、outはconfig指定
-  // デフォルトはEUC
-  $ieobj = new multibyte;
-  // outの設定
-  $ieobj->set_euc();
-  if ($wk = $this->get_config_obj()->find('inside_encoding_type')) {
-    $ieobj->set_guess_to_string($wk);
-    // 内部文字コードの広域設定
-    mw_area_setting::set_inside_encoding_type($wk);
+  // 内部エンコード設定
+  $inside_encoding_type = $this->get_config_obj()->find('inside_encoding_type');
+  if ('' === $inside_encoding_type) {
+    $inside_encoding_type = 'UTF-8';
   }
-  // inの推測
-  $gobj = new guess_from_data_encoding;
-  if ("" !== $this->get_config_obj()->find('encoding_hinting_name')) {
-    $gobj->set_encoding_string($this->get_config_obj()->find('encoding_hinting_name'));
-  }
-  // 推測
-  $gobj->guess();
-  // 推測値設定
-  $ieobj->set_guess_from_string($gobj->get_encoding_string());
-//var_dump($ieobj);
-//print "inside " . $ieobj->get_charset_string() . "\n";
-  //
-  $this->set_inside_encoding_obj($ieobj);
+  mw_set_ini_encoding($inside_encoding_type);  
 
-  // 出力エンコード用クラス作成
-  // inは「内部エンコードのout 、outはconfig指定
-  // デフォルトはEUC
-  $opobj = new multibyte;
-  // outの設定
-  $opobj->set_sjis();
-  if ($wk = $this->get_config_obj()->find('output_encoding_type')) {
-    $opobj->set_guess_to_string($wk);
+  // 入出力エンコード設定
+  $output_encoding_type = $this->get_config_obj()->find('output_encoding_type');
+  if ('' === $output_encoding_type) {
+    $output_encoding_type = 'UTF-8';
   }
-  // inの設定
-  if ($wk = $this->get_config_obj()->find('inside_encoding_type')) {
-    $opobj->set_guess_from_string($wk);
+  switch(strtolower($output_encoding_type)) {
+    case 'utf-8':
+    case 'utf-8-mobile#docomo':
+    case 'utf-8-mobile#kddi-a':
+    case 'utf-8-mobile#kddi-b':
+    case 'utf-8-mobile#softbank':
+      $e = 'utf-8';
+      break;
+
+    case 'euc-jp':
+    case 'eucjp-win':
+    case 'cp51932':
+      $e = 'euc-jp';
+      break;
+
+    case 'sjis':
+    case 'sjis-win':
+    case 'cp932':
+    case 'sjis-mac':
+    case 'sjis-mobile#docomo':
+    case 'sjis-mobile#kddi':
+    case 'sjis-mobile#softbank':
+      $e = 'Shift_JIS';
+      break;
+
+    case 'jis':
+    case 'jis-ms':
+    case 'cp50220':
+    case 'cp50220raw':
+    case 'cp50221':
+    case 'cp50222':
+    case 'iso-2022-jp':
+    case 'iso-2022-jp-ms':
+      $e = 'ISO-2022-JP';
+      break;
+
+    default:
+      throw new ErrorException('encode type invalid!!');
+      break;
   }
-//print "output " . $opobj->get_charset_string() . "\n";
-  $this->set_output_encoding_obj($opobj);
+  // 定数の設定
+  define("MW_INPUT_ENCODING", $output_encoding_type);
+  define("MW_OUTPUT_ENCODING", $output_encoding_type);
+  define("MW_OUTPUT_CONTENT_TYPE_ENCODING", $e);
 
   // CGI REQUESTインスタンスの生成
   $req = $this->get_instance('cgi_request', 'cgi_request.inc:cgi_request');
@@ -146,12 +156,13 @@ public function make_instancees()
   // 一応「Post Get」順とする
   // XXX 後でコンフィグではじく？
   $req->set_hi_priority_post();
-  $req->set_inside_encoding_obj($this->get_inside_encoding_obj());
   //
   $this->set_cgi_request_obj($req);
 
   // CGI RESPONSEインスタンスの生成
   $res = new cgi_response;
+  // 出力のデフォルトを「HTML」にしておく + 文字コード指定
+  $res->set_content_html(MW_OUTPUT_CONTENT_TYPE_ENCODING);
   //
   $this->set_cgi_response_obj($res);
 
@@ -338,12 +349,12 @@ public function run_main($cstring, $recursive_counter)
 
   // ダイレクトに「一文字めアンダースコア」なcstring呼び出したときNG
   if ( (0 === $recursive_counter)&&('_' === $cstring[0]) ) {
-    throw new Exception("\"" . $cstring . "\" is invalid command(2)!!");
+    throw new ErrorException("\"" . $cstring . "\" is invalid command(2)!!");
   }
 
   // 探してみる。無ければエラーで突っ返す
   if (is_null($model_data = $this->mapdata_->find($cstring))) {
-    throw new Exception("\"" . $cstring . "\" is invalid command!!");
+    throw new ErrorException("\"" . $cstring . "\" is invalid command!!");
   }
 //var_dump($model_data);
 //print "include is " . $model_data->get_include_filename() . "<BR>\n";
@@ -362,7 +373,6 @@ public function run_main($cstring, $recursive_counter)
   $model_ins->set_config($this->get_config_obj());
   $model_ins->set_cgi_request($this->get_cgi_request_obj());
   $model_ins->set_cgi_response($this->get_cgi_response_obj());
-  $model_ins->set_inside_encoding_obj($this->get_inside_encoding_obj());
   $model_ins->set_my_name($cstring);
   $model_ins->set_bag_obj($this->get_bag_obj());
   $model_ins->set_mobile($this->get_mobile_obj());
@@ -428,17 +438,17 @@ public function run()
   try {
     // インスタンス生成
     if (!($this->make_instancees())) {
-      throw new Exception("make re instance error!!");
+      throw new ErrorException("make re instance error!!");
     }
 
     // 入り口チェック
     if (!($this->entrance_check())) {
-      throw new Exception("entrance ceck error!!");
+      throw new ErrorException("entrance ceck error!!");
     }
 
     // 入力データパース&デコード
     if (!($this->parse_decode())) {
-      throw new Exception("parse or decode ceck error!!");
+      throw new ErrorException("parse or decode ceck error!!");
     }
 
     // マッピング
@@ -488,7 +498,6 @@ public function run()
       //
       $vobj->set_body($model_obj->get_body());
       $vobj->set_res_obj($this->get_cgi_response_obj());
-      $vobj->set_multi_obj($this->get_output_encoding_obj());
       $vobj->set_model_obj($model_obj);
       $vobj->output();
     }
@@ -541,8 +550,6 @@ private $mobobj_;	// mobile_infoクラスのインスタンス
 private $reqobj_;	// CGI REQUEST インスタンス
 private $resobj_;	// CGI RESPONSE インスタンス
 private $mapdata_;	// マッピングファイル用：configインスタンス
-private $inside_encoding_obj_;	// 内部エンコード用 multibyteインスタンス
-private $output_encoding_obj_;	// 出力用 multibyteインスタンス
 private $bag_obj_;	// model持ち回り用鞄インスタンス
 
 

@@ -69,14 +69,6 @@ public function direct_output_on() { $this->direct_output_flg_ = true; }
 public function direct_output_off() { $this->direct_output_flg_ = false; }
 public function is_direct_output_on() { return $this->direct_output_flg_; }
 
-
-//
-//
-public function set_inside_encoding_obj($o)
-  { $this->inside_encoding_obj_ = $o; }
-public function get_inside_encoding_obj()
-  { return $this->inside_encoding_obj_; }
-
 // XXX Skeltonでいいのか？
 public function get_template_dir() { return $this->get_config()->find('tmplate_base_dir'); }
 
