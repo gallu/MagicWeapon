@@ -138,12 +138,16 @@ public function connect($dbtype = 'mysql') {
 //var_dump($this->conn_);
 
   // 引数を作る
-  $dsn = "{$this->get_rdb_name()}:dbname={$this->get_database_name()};host={$this->get_host_name()};charset=utf8";
+  $dsn = "{$this->get_rdb_name()}:dbname={$this->get_database_name()};host={$this->get_host_name()}";
+  // 文字エンコードの指定があれば足し込む
+  if ("" !== $this->get_encode()) {
+    $dsn .= ";charset={$this->get_encode()}";
+  }
   // ポート番号は、指定があれば足し込む
   if ("" !== $this->get_port_num()) {
     $dsn .= ";port={$this->get_port_num()}";
   }
-//print "PDO dsn is {$dsn}\n";
+print "PDO dsn is {$dsn}\n";
 
   // connect
   try {

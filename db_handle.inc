@@ -241,10 +241,24 @@ public function set_port_num($s) { $this->port_num_ = $s; }
  * port番号等の取得
  *
  * @access public
- * @param string $s port番号等
+ * @return string port番号等
  */
 public function get_port_num() { return $this->port_num_; }
 
+/**
+ * 文字エンコードの設定
+ *
+ * @access public
+ * @param string $s エンコード文字列
+ */
+public function set_encode($s) { $this->encode_ = $s; }
+/**
+ * port番号等の取得
+ *
+ * @access public
+ * @return string エンコード文字列
+ */
+public function get_encode() { return $this->encode_; }
 
 /**
  * sql_utilインスタンスの設定
@@ -396,6 +410,7 @@ private $pass_;
 private $database_name_;
 private $host_name_;
 private $port_num_;
+private $encode_;
 //
 private $sql_util_obj_;	// sql_utilインスタンス格納領域(現在非推奨)
 private $mw_makesql_obj_; // mw_makesqlインスタンス格納領域

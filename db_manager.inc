@@ -91,6 +91,7 @@ static public function _get_handle_mono($config_filename)
   $conn->set_database_name($conf->find('database'));
   $conn->set_host_name($conf->find('host'));
   $conn->set_port_num($conf->find('port'));
+  $conn->set_encode($conf->find('encode'));
 
 //print "Trap1\n";
   // 接続
