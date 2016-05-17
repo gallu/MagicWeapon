@@ -9,18 +9,9 @@
  * @author  Michiaki Wuzawa <wuzawa@m-fr.net>
  **/
 
-// charsetの送信 をUTF-8にしておく
-ini_set('default_charset', 'UTF-8');
-
 // 内部文字コード指定
-setlocale(LC_ALL, 'ja_JP.UTF-8');
-ini_set('mbstring.language', 'Japanese');
-if (version_compare(PHP_VERSION, '5.6.0') < 0) {
-  ini_set('mbstring.internal_encoding', 'UTF-8'); /// 5.6.0から非推奨
-} else {
-  ini_set('internal_encoding', 'UTF-8'); // 5.6.0以降はこっち
-}
-mb_internal_encoding('UTF-8');
+require_once('mw_set_ini_encoding.inc');
+mw_set_ini_encoding('UTF-8');
 
 // 文字コードの自動判定用
 // XXX sjisの可能性が高い場合は「sjis-win,eucjp-win,JIS,UTF-8,ASCII」のほうがよさげ
