@@ -147,7 +147,7 @@ public function connect($dbtype = 'mysql') {
   if ("" !== $this->get_port_num()) {
     $dsn .= ";port={$this->get_port_num()}";
   }
-print "PDO dsn is {$dsn}\n";
+//print "PDO dsn is {$dsn}\n";
 
   // connect
   try {
