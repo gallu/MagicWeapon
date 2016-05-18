@@ -330,6 +330,88 @@ public function get_layout_filename() {
  */
 protected function set_layout_filename($v) { $this->set_bag('layout', $v); }
 
+/**
+ * CSRFトークン名の取得
+ *
+ * @access protected
+ * @return string セッションに入れるCSRF配列のkey名($_SESSION[$this->get_csrf_token_name()]['csrf_token'])
+ */
+protected function get_csrf_token_name() {
+  $name = $this->get_config()->find('csrf_token_name');
+  if ('' === $name) {
+    $name = 'csrf';
+  }
+  //
+  return $name;
+}
+
+/**
+ * CSRFトークンの登録
+ *
+ * セッションにCSRFトークンを一定数(csrf_token_num個)登録 ＋ テンプレートに設定(monoDic()使用)
+ *
+ * @access protected
+ */
+protected function set_csrf_token() {
+  // CSRFトークン数の把握
+  $num = $this->get_config()->find('csrf_token_num') + 0;
+  if (0 >= $num) {
+    $num = 10;
+  }
+//var_dump($num);
+
+  // トークンの作成
+  $diid = di::create('difficulty_imagining_identification');
+  $token = $diid->get_base64();
+//var_dump($token);
+
+  // テンプレートへの登録
+  $this->get_conv()->monoDic('csrf_token', $token);
+
+  // token数の調整
+  while ($num <= count(@$_SESSION[$this->get_csrf_token_name()]['csrf_token'])) {
+    array_shift($_SESSION[$this->get_csrf_token_name()]['csrf_token']);
+  }
+
+  // セッションへの登録
+  $_SESSION[$this->get_csrf_token_name()]['csrf_token'][$token] = time();
+
+}
+
+/**
+ * CSRFトークンの確認
+ *
+ * @access protected
+ * @return boolean 有効なCSRFトークンが設定されていればtrue、無効ならfalse
+ */
+protected function is_csrf_token() {
+  // CSRFチェック
+  $post_csrf_token = $this->get_cgi_request()->find('csrf_token');
+  if (false === isset($_SESSION[$this->get_csrf_token_name()]['csrf_token'][$post_csrf_token])) {
+    return false;
+  }
+
+  // 寿命の設定を把握
+  $expire = $this->get_config()->find('csrf_token_expire') + 0;
+  if (0 >= $expire) {
+    $expire = 60;
+  }
+//var_dump($expire);
+
+
+  // 寿命を把握して
+  $ttl = $_SESSION[$this->get_csrf_token_name()]['csrf_token'][$post_csrf_token];
+  // 先にトークンは削除(使い捨てなので)
+  unset($_SESSION[$this->get_csrf_token_name()]['csrf_token'][$post_csrf_token]);
+  // 寿命チェック(1分以内)
+  if (time() >=  $ttl + $expire) {
+    return false;
+  }
+
+  //
+  return true;
+}
+
 //private:
 } // end of class
 
