@@ -56,3 +56,15 @@ function assertIdentical($b1, $b2) {
   assertIdentical(is::is_email('hoge@ho_ge'), false);
   assertIdentical(is::is_email('@hoge.com'), false);
   assertIdentical(is::is_email('hoge@'), false);
+
+  // is_array
+  $awk = array(1,2,3);
+  assertIdentical(is::is_array($awk), true);
+  assertIdentical(is::is_array(array()), true);
+  $awk = new arrayObject();
+  assertIdentical(is::is_array($awk), true);
+  //
+  assertIdentical(is::is_array(null), false);
+  assertIdentical(is::is_array(10), false);
+  assertIdentical(is::is_array('abc'), false);
+  

@@ -327,6 +327,25 @@ static public function is_tel($s)
   return false;
 }
 
+/**
+ * 配列判定
+ *
+ * is_array + instanceofでarrayObject(継承クラス)かどうかを判定
+ *
+ * @access public
+ * @param string $a 判定する変数
+ * @return boolean arrayまたはarrayObject(継承クラス含む)ならtrue、それ以外ならfalse
+ */
+static public function is_array($a) {
+  if (true === is_array($a)) {
+    return true;
+  }
+  if ($a instanceof arrayObject) {
+    return true;
+  }
+  // else
+  return false;
+}
 
 
 
