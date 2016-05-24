@@ -227,6 +227,20 @@ public function set_content_pdf($filename)
 }
 
 /**
+ * json用
+ *
+ * XXX 一旦、文字エンコードはUTF-8固定
+ *
+ * @access public
+ */
+public function set_content_json()
+{
+  $this->set_content("application/json; charset=utf-8");
+
+  return true;
+}
+
+/**
  * Location設定
  *
  * これを設定するとほかの結構なheader設定が無意味になるので注意すること

@@ -277,6 +277,46 @@ public function redirect($path, $http_status=302) {
 }
 
 /**
+ * json出力用お便利メソッド
+ *
+ * XXX 自力でやってもいいけど、使用頻度高めなので
+ *
+ * @access public
+ * @param array $a 「jsonにしたい情報」が入ってる配列(arrayObjectでもよし)
+ * @param boolean $debug_flg デバッグ用に「content-typeをjsonにしたくない」時に明示的にtrue。デフォルトはfalse(content-typeをjsonにする)
+ */
+public function json_out($a, $debug_flg = false) {
+  $this->direct_output_on();
+  $this->set_body(json_encode($a));
+  if (false === $debug_flg) {
+    $this->get_cgi_response()->set_content_json();
+  }
+}
+
+/**
+ * csv出力用お便利メソッド
+ *
+ * XXX 自力でやってもいいけど、使用頻度高めなので
+ *
+ * @access public
+ * @param string $filename ダウンロードさせたいファイル名
+ * @param string|array $csv_data csv文字列またはcsvにしたい配列(arrayObjectでもよし)
+ */
+public function csv_out($filename, $csv_data) {
+require_once('is.inc');
+  if (true === is::is_array($csv_data)) {
+    // 配列の類いが指定されたと仮定
+    require_once('csv_util.inc');
+    $this->set_body(csv_util::make_csv_string($csv_data));
+  } else {
+    // 文字列が指定されたと仮定(あんまり細かいチェックはしない)
+    $this->set_body($csv_data);
+  }
+  $this->direct_output_on();
+  $this->get_cgi_response()->set_content_csv($filename);
+}
+
+/**
  * cgi requestからの情報取得＋get_convでとれるインスタンスへの情報のセット
  *
  * XXX 所謂お便利メソッド
