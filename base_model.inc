@@ -53,10 +53,16 @@ public function init()
 public function initialize() {
   // 親呼んで
   $r = parent::initialize();
-  // デフォルトのレイアウトだけ設定しておく
-  if (false === $this->is_bag('layout')) {
-    $this->set_layout_filename('layout.tpl');
+
+  // configに設定がある場合、デフォルトのレイアウトだけ設定しておく
+  // XXX modelがネストでcallされている場合、１ネスト目だけ処理すること！！
+  if (0 == $this->get_recursive_depth()) {
+    if ('' !== ($layout = $this->get_config()->find('layout'))) {
+      // レイアウトをon
+      $this->set_layout_filename($layout);
+    }
   }
+//var_dump($this->get_bag('layout'));
 
   //
   return $r;
