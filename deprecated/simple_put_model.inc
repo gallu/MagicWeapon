@@ -6,6 +6,7 @@
  * @package magicweapon
  * @link http://www.grid-works-guild.net/MagicWeapon/ MagicWeapon
  * @access  public
+ * @deprecated
  * @author  Michiaki Wuzawa <wuzawa@m-fr.net>
  * @create  $LastChangedDate$
  * @version $Revision$
