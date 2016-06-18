@@ -472,7 +472,7 @@ public function get_value($name)
  * @access public
  * @param string $inname 内部呼称用の名前
  * @param string $cginame CGI Formでの名前
- * @param string $tmpname テンポラリテーブル上での名前
+ * @param string $tmpname テンポラリテーブル上での名前(現在未使用)
  * @param string $dbname DB上での名前
  * @param string $keyflg PKの場合、ここをpkにする
  * @param int $data_type DB上の型の定義。でふぉはstring(事実上のノーチェック)
@@ -505,7 +505,7 @@ public function push_element
   }
   $this->set_cgi_name($inname, $cginame);
 
-  // テンポラリテーブル名称の設定
+  // テンポラリテーブル名称の設定(現在未使用だけど、一応設定)
   if ("" === $tmpname) {
     $tmpname = $inname;
   }
