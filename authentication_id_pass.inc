@@ -3,6 +3,25 @@
 /**
  * IDとパスワードによる認証機構
  *
+<pre>
+テーブルフォーマット例
+-- 管理画面用管理者テーブル。ログイン情報系込み。割と固定なカラムも多し。
+DROP TABLE IF EXISTS admin_users;
+CREATE TABLE admin_users (
+  `id` varbinary(128) NOT NULL COMMENT '管理者を識別するためのID',
+  `pass` varbinary(128) NOT NULL COMMENT 'ログインパスワード。password_hashが現在のお勧め',
+  `lock_time` bigint unsigned NOT NULL COMMENT 'ロックタイム(エポック秒)。0以外なら「入っている時間まではログイン出来ない」',
+  `err_count` int unsigned NOT NULL COMMENT 'ロックタイム(エポック秒)。0以外なら「入っている時間まではログイン出来ない」',
+  `account_stop` int unsigned NOT NULL default 0 COMMENT 'これが０以外(基本は１)なら「アカウント停止状態」と見なす',
+  -- 以下、authentication_id_passクラス系の処理では使わない(けどまぁよくつかう)カラム群
+  `name` varchar(128) NOT NULL COMMENT '表示名',
+  `role` int unsigned NOT NULL COMMENT '権限系。使わなければ削除で。',
+  `created` datetime NOT NULL COMMENT '作成日時',
+  `updated` datetime NOT NULL COMMENT '修正日時',
+  `memo` text NOT NULL COMMENT 'ユーザに対するmemo',
+  PRIMARY KEY (`id`)
+)CHARACTER SET 'utf8mb4', ENGINE=InnoDB, COMMENT='1レコードが1ユーザを意味するテーブル';
+</pre>
  * @package magicweapon
  * @link http://www.grid-works-guild.net/MagicWeapon/ MagicWeapon
  * @access  public
@@ -51,10 +70,10 @@ public function set_id($v) { $this->id_ = $v; }
 /**
  * raw_password(生パスワード)取得
  *
- * @access public
+ * @access protected
  * @return string 生パスワード
  */
-public function get_raw_password() { return $this->raw_password_; }
+protected function get_raw_password() { return $this->raw_password_; }
 /**
  * raw_password(生パスワード)設定
  *
@@ -152,13 +171,25 @@ public function login()
 //var_dump($r);
   if (false === $r) {
     // ないらしいので認証失敗
+//echo "id not find.\n";
     return false;
   }
 
+  // アカウント停止状態かどうか確認
+  if (true === $obj->is_name('account_stop')) {
+    if (0 !== $obj->get_value('account_stop')) {
+      // アカウント停止状態なので認証失敗
+//var_dump( $obj->get_value('account_stop') );
+//echo "account_stop.\n";
+      return false;
+    }
+  }
+
   // ログインロック時間の確認
-  if (0 != $obj->get_value('lock_time')) {
+  if (0 !== $obj->get_value('lock_time')) {
     // 時間経過が一定未満ならNG
     if (time() <= $obj->get_value('lock_time')) {
+//echo "lock_time.\n";
       return false;
     }
     // else
@@ -169,6 +200,7 @@ public function login()
 
   // パスワードの比較
   if ( false === $this->password_verify($obj) ) { 
+//echo "password_verify.\n";
     // エラー回数をインクリメント
     $num = $obj->get_value('err_count');
     $num ++;
