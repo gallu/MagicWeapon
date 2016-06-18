@@ -3,8 +3,7 @@
 /**
  * Cookieを用いた認証クラス(authorization)
  *
- * XXX あとで、上に持ち上げるもん持ち上げないとねぇ…
- *
+ * @deprecated 周辺クラスができあがってないので一旦非推奨で。後で関連クラス作ってから非推奨を解除します
  * @package magicweapon
  * @link http://www.grid-works-guild.net/MagicWeapon/ MagicWeapon
  * @access  public
@@ -12,29 +11,20 @@
  * @create  $LastChangedDate$
  * @version $Revision$
  **/
+require_once('authorization_base.inc');
+require_once('difficulty_imagining_identification.inc'); // XXX 後で可変にするかねぇ？
 
-
-class authorization_cookie {
+class authorization_cookie extends authorization_base {
 
 public function __construct()
 {
   //
-  //parent::__construct();
-  $this->init();
-}
-
-//
-public function init()
-{
-  $this->set_expire(12000); /// 寿命は10分 : XXX テスト用に200分
+  parent::__construct();
   $this->set_session_key_name('sid');
-  $this->set_clump_class_name(''); // clump名から解決できる前提
+  $this->set_clump_class_name(''); // デフォルトはclump_nameから解決
 }
 
-  // expire
-  public function get_expire() { return $this->expire_; }
-  public function set_expire($v) { $this->expire_ = $v; }
-  // session_key_name
+  // session_key_name: Cookie側の名前
   public function get_session_key_name() { return $this->session_key_name_; }
   public function set_session_key_name($v) { $this->session_key_name_ = $v; }
   // session用clump ファイル名
@@ -52,8 +42,16 @@ public function init()
  * @param object $model model系インスタンス：clumpげとで使う
  * @return boolean なにかあったらfalse
  */
-public function auth_on($uid, $model)
+public function auth_on($uid)
 {
+  // XXX 基底クラスい持ち上げて引数が変わったので、とりあえず「やむを得ず」の処置
+  $params = func_get_args();
+  if (2 < count($params)) {
+    throw new ErrorException('Missing argument.');
+  }
+  $uid = $params[0];
+  $model = $params[1];
+  //
   return $this->create_session($uid, $model);
 }
 
@@ -65,9 +63,14 @@ public function auth_on($uid, $model)
  * @param object $model model系インスタンス：clumpげとで使う
  * @return boolean 認証できたらtrue、できなきゃfalse
  */
-public function is_auth($model)
+public function is_auth()
 {
-//print "--------\n";
+  // XXX 基底クラスい持ち上げて引数が変わったので、とりあえず「やむを得ず」の処置
+  $params = func_get_args();
+  if (1 < count($params)) {
+    throw new ErrorException('Missing argument.');
+  }
+  $model = $params[0];
 
   //
   $k = $this->get_session_id($model);
@@ -94,7 +97,7 @@ public function is_auth($model)
 //print "exp is " . $exp . "\n";
 
 
-  // 時間切れなら、NG〜
+  // 時間切れなら、NG?
   if (time() > $exp) {
     $as->del();
     return false;
@@ -114,11 +117,9 @@ public function is_auth($model)
   // user_id設定して
   $model->set_bag('user_id', $as->get_value('id'));
 
-  // 認可OK〜
+  // 認可OK?
   return true;
 }
-
-
 
 /**
  * セッションIDを新しく作る
@@ -137,15 +138,16 @@ protected function create_session($uid, $model)
   $as->set_value('id', $uid);
   $as->set_value('expire', time() + $this->get_expire()); // XXX
 
-  // XXX これ、後でクラス化してそっちに変更する〜
-  $fp = fopen('/dev/urandom', 'r');
-  $token = hash('sha512', fread($fp, 256));
+  // XXX 後でクラス名可変にするかねぇ？
+  $diid_o = new difficulty_imagining_identification();
+  $token = $diid_o->get_base64();
+
   //
   $as->set_value('sid', $token);
 //var_dump($as->get_all_data_to_hash());
 
   //
-  $as->insert();
+  $s = $as->insert(); // XXX
 
   // 設定する
   $this->create_session_core($token);
@@ -162,9 +164,8 @@ public function get_session_id($model) {
 // セッションIDをcookieに設定
 public function create_session_core($token) {
 //print "into create_session_core {$token} \n";
-  setcookie($this->get_session_key_name(), $token, 0, '/'); // XXXX
+  setcookie($this->get_session_key_name(), $token, 0, '/'); // XXX pathとか固定だしsecureフラグ付けてないし…この辺は後で要改修かねぇ
 }
-
 
 
 // セッションclumpのインスタンスげと
@@ -185,7 +186,6 @@ require_once($class_name);
 
 
 //private:
-private $expire_;
 private $session_key_name_;
 private $clump_name_;
 private $clump_class_name_;
