@@ -14,24 +14,13 @@
 
 abstract class page_controll_base {
 
-public function __constract()
-{
-  $this->init();
-}
-
-/**
- * 初期化
- *
- * @access public
- */
-public function init()
+public function __construct()
 {
   $this->set_page_num(0);
   $this->set_par_item_num(1);
   $this->next_flg_off();
   $this->back_flg_off();
 }
-
 
 /**
  * 現在Page数の指定

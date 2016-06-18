@@ -16,21 +16,10 @@ require_once('page_controll_base.inc');
 
 class page_controll extends page_controll_base {
 
-public function __constract()
+public function __construct()
 {
-  parent::__constract();
-  //$this->init();
-}
-
-
-/**
- * 初期化
- *
- * @access public
- */
-public function init()
-{
-  parent::init();
+  //
+  parent::__construct();
   //
   $this->clear_datas();
 }

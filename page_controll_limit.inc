@@ -5,7 +5,6 @@
  *
  * 最低限のデータをDBから取り出すタイプ
  * max pageなどは取れないが、メモリ的には軽い
- * 現状、主キーが１カラムのSQLにのみ対応
  *
  * @package magicweapon
  * @access  public
@@ -18,22 +17,13 @@ require_once('page_controll_base.inc');
 
 class page_controll_limit extends page_controll_base {
 
-public function __constract()
+public function __construct()
 {
-  parent::__constract();
-  //$this->init();
+  //
+  parent::__construct();
+  //
+  $this->get_all_flg_on(); // 「全カラム取得」をデフォルトにする
 }
-
-/**
- * 初期化
- *
- * @access public
- */
-public function init()
-{
-  parent::init();
-}
-
 
 /**
  * DBハンドルの設定
@@ -111,14 +101,24 @@ public function make_list()
 
   // データの取得
   $res = $dbh->query($sql);
+  if (true === $this->is_get_all_flg()) {
+    $res->set_fetch_type_hash();
+  } else {
+    $res->set_fetch_type_num();
+  }
 //var_dump($sql);
 //var_dump($dbh);
 //var_dump($res);
 
   // とりあえず全部データげとる
+  // 「１カラムのみ」か「全カラム」かはモード次第
   $list = array();
   while($res->fetch()) {
-    $list[] = $res->get_data(0);
+    if (true === $this->is_get_all_flg()) {
+      $list[] = $res->get_row();
+    } else {
+      $list[] = $res->get_data(0);
+    }
   }
 
   // nextフラグ判定とデータのちょん切り
@@ -171,9 +171,36 @@ public function get_max_page()
   return $ret;
 }
 
+/**
+ * 「全カラム取得」モードか判定
+ *
+ * 旧来はfalse(pk１カラムのみ取得)。新しいフォーマットはtrue(全カラム情報取得)
+ *
+ * @access public
+ * @return boolean 1カラムのみモードならfalse、全カラム取得モードならtrue
+ */
+public function is_get_all_flg() { return $this->get_all_flg_; }
+/**
+ * 「全カラム取得モード」に設定
+ *
+ * XXX 一旦こっちをデフォルトに
+ *
+ * @access public
+ */
+public function get_all_flg_on() { $this->get_all_flg_ = true; }
+/**
+ * 「1カラムのみ取得モード」に設定
+ *
+ * XXX 旧バージョンのデフォルト。今はこっちをデフォルトにしない
+ *
+ * @access public
+ */
+public function get_all_flg_off() { $this->get_all_flg_ = false; }
+
 //private:
 private $dbh_;
 private $sql_;
+private $get_all_flg_;
 
 } // end of class
 
