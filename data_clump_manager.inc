@@ -27,6 +27,11 @@ static public function get_instance_without_datahandle($name, $o = null)
 {
   // インスタンス作る
   if (true === is_null($o)) {
+    // classが存在しなかったら固定のディレクトリからincludeを試みる
+    if (false === class_exists($name)) {
+      require_once("clump/{$name}.inc");
+    }
+    //
     $o = new $name;
   } else {
     $o->init();
