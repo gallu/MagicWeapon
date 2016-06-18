@@ -227,7 +227,7 @@ public function set_config($fn)
   // DIコンテナ設定を取り込んでおく
   $s = $this->get_config_obj()->find('di_config');
   if ('' !== $s) {
-    DI::set_config($s);
+    di::set_config($s);
   }
 
   // data_clump関連の設定
