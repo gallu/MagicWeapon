@@ -69,7 +69,7 @@ public function make_list()
   $dbh = $this->get_db();
 
   // SQL文の完成
-  $from  = $this->get_page_num() * $this->get_par_item_num();
+  $from  = $this->_get_page_num() * $this->get_par_item_num();
   $to = $this->get_par_item_num() + 1;
   //$sql = $this->get_sql() . ' ' . $suobj->limited_range($from, $to) . ';';
 
@@ -134,7 +134,7 @@ public function make_list()
   $this->set_list($list);
 
   // back フラグの設定
-  if ($this->get_page_num() != 0) {
+  if ($this->_get_page_num() != 0) {
     $this->back_flg_on();
   } else {
     $this->back_flg_off();

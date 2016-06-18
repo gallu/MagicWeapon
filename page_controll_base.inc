@@ -20,7 +20,30 @@ public function __construct()
   $this->set_par_item_num(1);
   $this->next_flg_off();
   $this->back_flg_off();
+  //
+  $this->page_mode_start_1();
 }
+
+//
+protected function set_page_mode($v) { $this->page_mode_ = $v; }
+protected function is_page_mode() { return $this->page_mode_; }
+/**
+ * Pageモードを「0 start」に設定
+ *
+ * XXX 旧来のデフォルト
+ *
+ * @access public
+ */
+public function page_mode_start_0() { $this->set_page_mode(false); }
+/**
+ * Pageモードを「1 start」に設定
+ *
+ * XXX 新規のデフォルト
+ *
+ * @access public
+ */
+public function page_mode_start_1() { $this->set_page_mode(true); }
+//
 
 /**
  * 現在Page数の指定
@@ -28,14 +51,42 @@ public function __construct()
  * @access public
  * @param int $i 現在Page数
  */
-public function set_page_num($i) { $this->page_num_ = (($i+0) > 0)? $i: 0; }
+public function set_page_num($i) {
+  if (true === $this->is_page_mode()) {
+    $i = (int)$i;
+    if (0 === $i) {
+      $i = 1;
+    }
+    $i --;
+  }
+  //
+  $this->page_num_ = (($i+0) > 0)? $i: 0;
+}
 /**
  * 現在Page数の取得
+ *
+ * XXX page_modeによって取得値が変わるので注意
  *
  * @access public
  * @return int 現在Page数
  */
-public function get_page_num() { return $this->page_num_; }
+public function get_page_num() {
+  if (true === $this->is_page_mode()) {
+    $p = $this->_get_page_num() + 1;
+  } else {
+    $p = $this->_get_page_num() + 1;
+  }
+  return $p;
+}
+/**
+ * 現在Page数の取得(内部処理用)
+ *
+ * @access protected
+ * @return int 現在Page数
+ */
+protected function _get_page_num() {
+  return $this->page_num_;
+}
 
 /**
  * 1Pageあたりの要素数の指定
@@ -176,13 +227,23 @@ abstract public function get_max_page();
  * 概ね以下の書式を想定
  * 
 <pre>
+(CONV書式)
 現在 %%%now_page%%% Pageです。
-$$$is_next$$$
-<a href="?c=hogehoge&id=iddd&p=%%%next_page%%%">次を見る</a><br />
-$$$/is_next$$$
 $$$is_back$$$
 <a href="?c=hogehoge&id=iddd&p=%%%back_page%%%">前に戻る</a><br />
 $$$/is_back$$$
+$$$is_next$$$
+<a href="?c=hogehoge&id=iddd&p=%%%next_page%%%">次を見る</a><br />
+$$$/is_next$$$
+
+(Smarty書式)
+現在 {$now_page} Pageです。
+{if true == $is_back}
+<a href="?c=hogehoge&id=iddd&p={$back_page}">前に戻る</a><br />
+{/if}
+{if true == $is_next}
+<a href="?c=hogehoge&id=iddd&p={$next_page}">次を見る</a><br />
+{/if}
 </pre>
  *
  * @access public
@@ -213,6 +274,7 @@ private $par_item_num_;	// 1Pageあたりの要素数
 private $next_flg_;	//
 private $back_flg_;	//
 private $list_;		// 出力に用いるList : Pageingされた内容
+private $page_mode_; // Pageモード。falseなら0 start, trueなら1 start
 
 } // end of class
 

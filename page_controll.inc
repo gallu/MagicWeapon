@@ -67,13 +67,13 @@ public function make_list()
 
   // 現在指定されているPageが範疇内かどうか決定
   // XXX 範疇内でない場合、最大Pageに無理やり調整
-  $min = $this->get_page_num() * $this->get_par_item_num() + 1;
+  $min = $this->_get_page_num() * $this->get_par_item_num() + 1;
   if ( $count < $min ) {
     $this->set_page_num($this->get_max_page());
   }
 
   // 出力用のListを抽出
-  $base = $this->get_page_num() * $this->get_par_item_num();
+  $base = $this->_get_page_num() * $this->get_par_item_num();
   $datas = $this->get_datas();
   $list = array();
   for($i=0; $i < $this->get_par_item_num(); $i ++) {
@@ -85,14 +85,14 @@ public function make_list()
   $this->set_list($list);
 
   // フラグの設定
-  if ($this->get_page_num() != 0) {
+  if ($this->_get_page_num() != 0) {
     $this->back_flg_on();
   } else {
     $this->back_flg_off();
   }
 
   $max = $this->get_max_page();
-  if ($this->get_page_num() < $max) {
+  if ($this->_get_page_num() < $max) {
     $this->next_flg_on();
   } else {
     $this->next_flg_off();
