@@ -75,6 +75,9 @@ public function set_from_cgi_update($req, $empty_overwrite_flg = false)
 {
 }
 
+public function get_all_view_values($extra_param = array())
+{
+}
 public function get_all_data_to_hash($extra_param = array())
 {
 }
