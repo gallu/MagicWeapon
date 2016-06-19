@@ -288,11 +288,14 @@ public function redirect($path, $http_status=302) {
  * XXX 自力でやってもいいけど、使用頻度高めなので
  *
  * @access public
- * @param string $com 遷移させたいコマンド名
+ * @param string $com 遷移させたいコマンド名(空文字なら、デフォルト(index)に飛ばす(c=を付けない)
  * @param int $http_status 302(Moved Temporarily)か301(Moved Permanently)か。デフォは302。
  */
 public function redirect_command($com, $http_status=302) {
-  $path = $_SERVER['SCRIPT_NAME'] . "?c={$com}";
+  $path = $_SERVER['SCRIPT_NAME'];
+  if ('' !== $com) {
+    $path .= "?c={$com}";
+  }
   $this->redirect($path, $http_status);
 }
 
