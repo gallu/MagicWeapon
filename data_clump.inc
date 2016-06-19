@@ -1111,6 +1111,10 @@ public function insert()
   if ('' !== $this->get_insert_date_name()) {
     $this->set_value_nowdate( $this->get_insert_date_name() );
   }
+  // レコード編集日付の自動挿入(未入力だとおこられるので)
+  if ('' !== $this->get_update_date_name()) {
+    $this->set_value_nowdate( $this->get_update_date_name() );
+  }
 
   return $this->_set_to_datahandle('create');
 }
