@@ -283,6 +283,20 @@ public function redirect($path, $http_status=302) {
 }
 
 /**
+ * コマンド名を指定するリダイレクト(いわゆる、HTTPでlocationヘッダをぶちかます系)
+ *
+ * XXX 自力でやってもいいけど、使用頻度高めなので
+ *
+ * @access public
+ * @param string $com 遷移させたいコマンド名
+ * @param int $http_status 302(Moved Temporarily)か301(Moved Permanently)か。デフォは302。
+ */
+public function redirect_command($com, $http_status=302) {
+  $path = $_SERVER['SCRIPT_NAME'] . "?c={$com}";
+  $this->redirect($path, $http_status);
+}
+
+/**
  * json出力用お便利メソッド
  *
  * XXX 自力でやってもいいけど、使用頻度高めなので
