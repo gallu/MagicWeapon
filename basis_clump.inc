@@ -54,12 +54,23 @@ public function get_all_names() { return $this->allname_; }
  * setter
  *
  * 値を設定する。すでに存在するnameを指定した場合は上書き
+ * nameが存在しない場合は設定しない
  *
  * @access public
  * @param string $n 設定するデータの名前
  * @param string $v 設定するデータの値
+ * @param boolean $b 強制上書きフラグ(trueなら「nameの存在にかかわらず」上書き：defaultはfalse)
  */
-public function set_data($n, $v) { $this->data_[$n] = $v; }
+public function set_data($n, $v, $b = false)
+{
+  if (false === $b) {
+    if (false === $this->is_name($n)) {
+      return ;
+    }
+  }
+  //
+  $this->data_[$n] = $v;
+}
 
 /**
  * getter
