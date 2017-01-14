@@ -284,7 +284,7 @@ public function erase_key($key)
 
   // 対象を検索 & 削除
   $ret = 0;
-  while(-1 === ($itr = $this->find($key))) {
+  while(-1 !== ($itr = $this->find($key))) {
     // 削除対象数取得
     $ret ++;
     $this->erase($itr);
