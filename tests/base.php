@@ -12,12 +12,12 @@ class xxxxTest extends TestCase {
   /*
    * テスト前処理
    */
-  //public static setUpBeforeClass(){}
+  //public static function setUpBeforeClass(){}
 
   /*
    * テスト後処理
    */
-  //public static tearDownAfterClass(){}
+  //public static function tearDownAfterClass(){}
 
   /*
    * @test
