@@ -1,7 +1,10 @@
 <?php
 
-// PHPUnit用baseファイル
+/*
+ * PHPUnit用baseファイル
+ */
 
+//
 use PHPUnit\Framework\TestCase;
 
 //

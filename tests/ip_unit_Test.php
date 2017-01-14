@@ -42,7 +42,7 @@ class ip_unitTest extends TestCase {
       $awk = explode(',', $wk);
       $net = trim($awk[0]);
       $ip  = trim($awk[1]);
-      $ret = ip_util::ip_in_network($ip, $net);
+      $ret = ip_util::ip_in_network($ip, $net, "{$wk} false.");
       $this->assertSame($ret, true);
     }
   }

@@ -29,8 +29,12 @@ $obj = new multimap;
 
   // 単値
   $s = $obj->find('test');
-var_dump($s);
+//var_dump($s);
+  $s = $obj->find('test-name1');
+//var_dump($s);
+
+  // key削除
+  $r = $obj->erase_key('test-name1');
+var_dump($r);
   $s = $obj->find('test-name1');
 var_dump($s);
-
-
