@@ -5,6 +5,7 @@
  * XXX 「base64は暗号化ぢゃない」とかいう突っ込みは無視。
  * しゃぁないやん mcrypt 入ってない環境用なんだからさぁ orz
  *
+ * @deprecated
  * @package magicweapon
  * @link http://www.grid-works-guild.net/MagicWeapon/ MagicWeapon
  * @access  public
